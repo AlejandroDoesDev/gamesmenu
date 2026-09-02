@@ -106,9 +106,6 @@
   <audio id="jumpSound" src="https://www.myinstants.com/media/sounds/cartoon-jump.mp3"></audio>
 
   <script>
-    // ============================================
-    // CAMBIA ESTO POR TU URL DE GOOGLE APPS SCRIPT
-    // ============================================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD3AOdO-qxiM0IPDw9kp0xH1Xk43lgdrk4-rP-5jbH4t2GXlFiJkqUYeNyXpVp-1uL/exec';
     
     const player = document.getElementById('player'), chaser = document.getElementById('chaser'), background = document.getElementById('background');
@@ -137,7 +134,7 @@
       const url = new URL(SCRIPT_URL);
       url.searchParams.append('action', action);
       for (const [k, v] of Object.entries(params)) url.searchParams.append(k, v);
-      const r = await fetch(url.toString(), { method: action === 'leaderboard' ? 'GET' : 'POST' });
+      const r = await fetch(url.toString(), { method: 'GET' });
       const t = await r.json();
       return t;
     }
