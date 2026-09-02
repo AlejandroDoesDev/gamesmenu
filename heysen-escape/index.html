@@ -100,6 +100,13 @@
     </div>
   </div>
 
+  <!-- Sonidos de muerte precargados -->
+  <audio id="death1" preload="auto" src="https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3"></audio>
+  <audio id="death2" preload="auto" src="https://www.myinstants.com/media/sounds/bone-crack.mp3"></audio>
+  <audio id="death3" preload="auto" src="https://www.myinstants.com/media/sounds/spongebob-fail.mp3"></audio>
+  <audio id="death4" preload="auto" src="https://www.myinstants.com/media/sounds/brain-fart.mp3"></audio>
+  <audio id="death5" preload="auto" src="https://www.myinstants.com/media/sounds/fart-with-reverb.mp3"></audio>
+
   <audio id="menuMusic" loop src="https://www.myinstants.com/media/sounds/mii-channel-music.mp3"></audio>
   <audio id="gameMusic" loop src="https://www.myinstants.com/media/sounds/dreamrunning_trim-1.mp3"></audio>
   <audio id="jobSound" src="https://www.myinstants.com/media/sounds/steal-a-brainrot-job-job-job-sahur.mp3"></audio>
@@ -113,7 +120,13 @@
     const authScreen = document.getElementById('authScreen'), registerBox = document.getElementById('registerBox'), loginBox = document.getElementById('loginBox');
     const gameOverScreen = document.getElementById('gameOver'), leaderboard = document.getElementById('leaderboard'), leaderboardList = document.getElementById('leaderboardList');
     const menuMusic = document.getElementById('menuMusic'), gameMusic = document.getElementById('gameMusic'), jobSound = document.getElementById('jobSound'), jumpSound = document.getElementById('jumpSound');
-    const deathSources = ['https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3','https://www.myinstants.com/media/sounds/bone-crack.mp3','https://www.myinstants.com/media/sounds/spongebob-fail.mp3','https://www.myinstants.com/media/sounds/brain-fart.mp3','https://www.myinstants.com/media/sounds/fart-with-reverb.mp3'];
+    const deathSounds = [
+      document.getElementById('death1'),
+      document.getElementById('death2'),
+      document.getElementById('death3'),
+      document.getElementById('death4'),
+      document.getElementById('death5')
+    ];
     let username = localStorage.getItem('heysenSession') || '', userData = null;
     let isLocalMode = false;
     let localBestScore = parseInt(localStorage.getItem('heysenLocalBest') || '0');
@@ -199,7 +212,7 @@
     
     function collidesThin(a,b){const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect(),inset=br.width*.32;return!(ar.right-10<br.left+inset||ar.left+10>br.right-inset||ar.bottom-8<br.top+10||ar.top+8>br.bottom-10);}
     
-    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacles.forEach(o=>clearInterval(o.timer));stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d=new Audio(deathSources[Math.floor(Math.random()*deathSources.length)]);d.playbackRate=.65+Math.random()*1;d.volume=.9;d.play().catch(()=>{});gameOverScreen.style.display='block';playMenuMusic();}}
+    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacles.forEach(o=>clearInterval(o.timer));stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d = deathSounds[Math.floor(Math.random() * deathSounds.length)]; d.playbackRate = .65 + Math.random() * 1; d.volume = .9; d.currentTime = 0; d.play().catch(() => {}); gameOverScreen.style.display='block';playMenuMusic();}}
     
     async function openBoard(){leaderboardList.innerHTML='<li>Cargando...</li>';leaderboard.style.display='block';try{const res=await callScript('leaderboard');leaderboardList.innerHTML='';if(!res.users||!res.users.length){const li=document.createElement('li');li.className='empty';li.textContent='Sin jugadores.';leaderboardList.appendChild(li);}else{res.users.slice(0,20).forEach(u=>{const li=document.createElement('li');li.textContent=u.username+' — '+u.total+' pts';leaderboardList.appendChild(li);});}}catch(e){leaderboardList.innerHTML='<li>Error: '+e.message+'</li>';}}
     
