@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The web site of lukesolorzano</title>
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card-bg: #1e293b;
+        --text: #e2e8f0;
+        --accent: #38bdf8;
+        --accent-2: #22d3ee;
+        --muted: #94a3b8;
+      }
 
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, var(--bg), #0b1220);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem 1rem 4rem;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+        margin: 0 0 0.5rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 1rem;
+      }
+
+      h2 {
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-size: 1.6rem;
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+      }
+
+      .game-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 12px;
+        padding: 1rem;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        display: block;
+      }
+
+      .game-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        border-color: rgba(56, 189, 248, 0.4);
+      }
+
+      .game-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .game-desc {
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+
+      .section-note {
+        color: var(--muted);
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+      }
+
+      .heysen-section {
+        margin-top: 2.5rem;
+        background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(34,211,238,0.05));
+        border: 1px solid rgba(56, 189, 248, 0.25);
+        border-radius: 12px;
+        padding: 1.25rem;
+      }
+
+      .heysen-section h2 {
+        margin-top: 0;
+      }
+
+      .tutor-img {
+        margin-top: 2.5rem;
+        text-align: center;
+      }
+
+      .tutor-img img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.08);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      }
+
+      footer {
+        margin-top: 3rem;
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Bienvenido a mi página</h1>
+        <p class="subtitle">Yo hago juegos, y estoy intentando hacer uno en Neocities.</p>
+        <p class="subtitle">¡Más juegos próximamente!</p>
+      </header>
+
+      <!-- Otros juegos (no de Heysen) -->
+      <h2>🎮 Otros juegos</h2>
+      <div class="games-grid">
+        <!-- Aquí puedes poner otros juegos que no sean de Heysen -->
+        <p class="section-note">Próximamente más juegos aquí.</p>
+      </div>
+
+      <!-- Sección separada: Juegos de Heysen -->
+      <div class="heysen-section">
+        <h2>🎮 Juegos de Heysen</h2>
+        <div class="games-grid">
+          <a class="game-card" href="/heysenhistory">
+            <div class="game-title">Heysen Clicker</div>
+            <div class="game-desc">Un clicker inspirado en Heysen.</div>
+            <div class="section-note">🕹️ Jugar ahora</div>
+          </a>
+
+          <a class="game-card" href="/heysenjob">
+            <div class="game-title">Heysen</div>
+            <div class="game-desc">Nuevo juego de Heysen.</div>
+            <div class="section-note">🚀 Jugar ahora</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="tutor-img">
+        <img 
+          src="/HeysenRamos.png" 
+          alt="EL MEJOR TUTOR, HEYSEN RAMOS"
+        >
+        <p class="section-note">EL MEJOR TUTOR, HEYSEN RAMOS</p>
+      </div>
+    </div>
+  </body>
+</html>
