@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Heysen Escape - Job</title>
+  <link rel="preload" as="image" href="./assets/images/monster.png">
+  <link rel="preload" as="image" href="./assets/images/HeysenIdle.png">
+  <link rel="preload" as="image" href="./assets/images/HeysenCrouch.png">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a15; font-family: Arial, sans-serif; touch-action: none; }
@@ -14,7 +17,7 @@
     #floor { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; background: linear-gradient(#3a3a5a,#1a1a3a); border-top: 4px solid #ffd700; z-index: 1; }
     .obstacle { position: absolute; background: url("assets/images/jobjobsahur.gif") center / 100% 100% no-repeat; z-index: 5; }
     .obstacle.blue { filter: hue-rotate(180deg) saturate(2); }
-    #chaser { position: absolute; width: 200px; height: 200px; left: 50%; bottom: 120px; margin-left: -250px; transform: translateX(-50%); background: url("assets/images/monster.png") center / contain no-repeat; z-index: 8; }
+    #chaser { position: absolute; width: 200px; height: 200px; left: 50%; bottom: 120px; margin-left: -250px; transform: translateX(-50%); background: url("./assets/images/monster.png") center / contain no-repeat; z-index: 8; will-change: margin-left; }
     #score { position: fixed; top: 20px; left: 20px; color: white; font-size: 28px; font-weight: bold; text-shadow: 3px 3px 6px #000; z-index: 100; }
     #userBar { position: fixed; top: 18px; right: 20px; z-index: 100; color: white; font-weight: bold; }
     #leaderboardBtn, #logoutBtn { margin-left: 8px; padding: 9px 13px; border: 0; border-radius: 10px; font-weight: bold; cursor: pointer; background: #ffd700; color: #1a1a2e; }
@@ -131,7 +134,9 @@
     let isLocalMode = false;
     let localBestScore = parseInt(localStorage.getItem('heysenLocalBest') || '0');
     let gameRunning = false, score = 0, gameSpeed = 6, bgX = 0, playerY = 0, velocityY = 0, jumping = false, ducking = false, chaserOffset = 250;
-    let obstacles = [], obstacleTimer, gameTimer, scoreTimer, jobSoundTimer;
+    let obstacles = [], obstacleTimer = 0, scoreTimer = 0, jobSoundTimer = 0;
+    let lastFrame = 0, scoreAccumulator = 0, jobAccumulator = 0, spawnAccumulator = 0, animationFrame = 0;
+    let viewportWidth = window.innerWidth;
     const keys = { up:false, down:false };
     
     const jumpBtn = document.getElementById('jumpBtn');
@@ -202,17 +207,106 @@
     
     function login(n,d){username=n;userData=d;localStorage.setItem('heysenSession',n);localStorage.setItem('heysenSessionData',JSON.stringify(d));currentUser.textContent='👤 '+n+' · '+d.total;userBar.style.display='block';hidePanels();startGame();}
     
-    function startGame(){obstacles.forEach(o=>{clearInterval(o.timer);o.el.remove();});obstacles=[];gameRunning=true;score=0;gameSpeed=6;bgX=0;playerY=0;velocityY=0;jumping=false;ducking=false;chaserOffset=250;player.classList.remove('crouching');player.style.height='100px';player.style.bottom='120px';background.style.left='0px';updateChaser();playGameMusic();clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacleTimer=setInterval(createObstacle,1450);gameTimer=setInterval(updateGame,20);scoreTimer=setInterval(()=>{score++;scoreDisplay.textContent='Puntos: '+score;if(score%50===0)gameSpeed+=.3;},100);jobSoundTimer=setInterval(()=>{if(gameRunning&&Math.random()<.32)play(jobSound,.55+Math.random()*.2,.65);},3800);}
+    function startGame(){
+      obstacles.forEach(o=>o.el.remove());
+      obstacles=[];
+      gameRunning=true; score=0; gameSpeed=6; bgX=0; playerY=0; velocityY=0;
+      jumping=false; ducking=false; chaserOffset=250;
+      scoreAccumulator=0; jobAccumulator=0; spawnAccumulator=0;
+      player.classList.remove('crouching'); player.style.height='100px';
+      player.style.bottom='120px'; background.style.left='0px';
+      updateChaser(); playGameMusic();
+      cancelAnimationFrame(animationFrame);
+      lastFrame=performance.now();
+      animationFrame=requestAnimationFrame(gameLoop);
+    }
+
+    function gameLoop(now){
+      if(!gameRunning) return;
+      const dt=Math.min((now-lastFrame)/1000,0.05);
+      lastFrame=now;
+      updateGame(dt);
+      animationFrame=requestAnimationFrame(gameLoop);
+    }
     
-    function updateGame(){if(!gameRunning)return;const sp=ducking?gameSpeed*.45:gameSpeed;bgX-=sp;if(bgX<=-innerWidth)bgX=0;background.style.left=bgX+'px';if(keys.up&&!jumping){jumping=true;velocityY=15;play(jumpSound,.88+Math.random()*.25,.8);}if(keys.down&&!jumping){ducking=true;player.classList.add('crouching');player.style.height='60px';chaserOffset=Math.max(135,chaserOffset-1.5);}else{ducking=false;player.classList.remove('crouching');player.style.height='100px';chaserOffset=Math.min(250,chaserOffset+.35);}if(jumping){playerY+=velocityY;velocityY-=.8;if(playerY<=0){playerY=0;velocityY=0;jumping=false;}}player.style.bottom=(120+playerY)+'px';updateChaser();if(chaserOffset<=135)endGame(true);}
+    function updateGame(dt){
+      if(!gameRunning)return;
+      const frameScale=dt*50;
+      const sp=(ducking?gameSpeed*.45:gameSpeed)*frameScale;
+      bgX-=sp;
+      if(bgX<=-viewportWidth) bgX=0;
+      background.style.left=bgX+'px';
+
+      if(keys.up&&!jumping){jumping=true;velocityY=15;play(jumpSound,.88+Math.random()*.25,.8);}
+      if(keys.down&&!jumping){
+        ducking=true; player.classList.add('crouching'); player.style.height='60px';
+        chaserOffset=Math.max(135,chaserOffset-1.5*frameScale);
+      }else{
+        ducking=false; player.classList.remove('crouching'); player.style.height='100px';
+        chaserOffset=Math.min(250,chaserOffset+.35*frameScale);
+      }
+
+      if(jumping){
+        playerY+=velocityY*frameScale;
+        velocityY-=.8*frameScale;
+        if(playerY<=0){playerY=0;velocityY=0;jumping=false;}
+      }
+      player.style.bottom=(120+playerY)+'px';
+      updateChaser();
+
+      spawnAccumulator+=dt*1000;
+      const spawnDelay=Math.max(850,1450-(gameSpeed-6)*45);
+      if(spawnAccumulator>=spawnDelay){spawnAccumulator=0;createObstacle();}
+
+      scoreAccumulator+=dt*1000;
+      if(scoreAccumulator>=100){
+        const points=Math.floor(scoreAccumulator/100);
+        scoreAccumulator-=points*100;
+        score+=points;
+        scoreDisplay.textContent='Puntos: '+score;
+        if(Math.floor(score/50)>Math.floor((score-points)/50)) gameSpeed+=.3;
+      }
+
+      jobAccumulator+=dt*1000;
+      if(jobAccumulator>=3800){
+        jobAccumulator=0;
+        if(Math.random()<.32)play(jobSound,.55+Math.random()*.2,.65);
+      }
+
+      for(let i=obstacles.length-1;i>=0;i--){
+        const o=obstacles[i], el=o.el;
+        const x=o.x-gameSpeed*frameScale;
+        o.x=x;
+        el.style.transform=`translate3d(${x}px,0,0)`;
+        if(!(o.isBlue&&ducking)&&collidesThin(player,el)) return endGame(true);
+        if(x<-220){el.remove();obstacles.splice(i,1);}
+      }
+
+      if(chaserOffset<=135) endGame(true);
+    }
     
     function updateChaser(){chaser.style.marginLeft='-'+chaserOffset+'px';}
     
-    function createObstacle(){if(!gameRunning)return;const el=document.createElement('div');el.className='obstacle';el.style.left=innerWidth+'px';const r=Math.random();let b=false;if(r<.30){el.style.width='120px';el.style.height='70px';}else if(r<.55){el.style.width='140px';el.style.height='90px';}else if(r<.78){b=true;el.classList.add('blue');el.style.width='115px';el.style.height='155px';}else{el.style.width='90px';el.style.height='120px';}el.style.bottom='120px';document.getElementById('gameContainer').appendChild(el);const o={el,isBlue:b,timer:null};obstacles.push(o);o.timer=setInterval(()=>{if(!gameRunning)return clearInterval(o.timer);const x=parseFloat(el.style.left)-gameSpeed;el.style.left=x+'px';if(!(b&&ducking)&&collidesThin(player,el))endGame(true);if(x<-180){clearInterval(o.timer);el.remove();obstacles=obstacles.filter(i=>i!==o);}},20);}
+    function createObstacle(){
+      if(!gameRunning)return;
+      const el=document.createElement('div');
+      el.className='obstacle';
+      el.style.left='0px';
+      const r=Math.random(); let b=false;
+      if(r<.30){el.style.width='120px';el.style.height='70px';}
+      else if(r<.55){el.style.width='140px';el.style.height='90px';}
+      else if(r<.78){b=true;el.classList.add('blue');el.style.width='115px';el.style.height='155px';}
+      else{el.style.width='90px';el.style.height='120px';}
+      el.style.bottom='120px';
+      document.getElementById('gameContainer').appendChild(el);
+      const o={el,isBlue:b,x:viewportWidth+20};
+      el.style.transform=`translate3d(${o.x}px,0,0)`;
+      obstacles.push(o);
+    }
     
     function collidesThin(a,b){const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect(),inset=br.width*.32;return!(ar.right-10<br.left+inset||ar.left+10>br.right-inset||ar.bottom-8<br.top+10||ar.top+8>br.bottom-10);}
     
-    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacles.forEach(o=>clearInterval(o.timer));stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d = deathSounds[Math.floor(Math.random() * deathSounds.length)]; d.playbackRate = .65 + Math.random() * 1; d.volume = .9; d.currentTime = 0; d.play().catch(() => {}); gameOverScreen.style.display='block';playMenuMusic();}}
+    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;cancelAnimationFrame(animationFrame);obstacles.forEach(o=>o.el.remove());obstacles=[];stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d = deathSounds[Math.floor(Math.random() * deathSounds.length)]; d.playbackRate = .65 + Math.random() * 1; d.volume = .9; d.currentTime = 0; d.play().catch(() => {}); gameOverScreen.style.display='block';playMenuMusic();}}
     
     async function openBoard(){leaderboardList.innerHTML='<li>Cargando...</li>';leaderboard.style.display='block';try{const res=await callScript('leaderboard');leaderboardList.innerHTML='';if(!res.users||!res.users.length){const li=document.createElement('li');li.className='empty';li.textContent='Sin jugadores.';leaderboardList.appendChild(li);}else{res.users.slice(0,20).forEach(u=>{const li=document.createElement('li');li.textContent=u.username+' — '+u.total+' pts';leaderboardList.appendChild(li);});}}catch(e){leaderboardList.innerHTML='<li>Error: '+e.message+'</li>';}}
     
@@ -222,6 +316,18 @@
     document.querySelector('.openBoard').onclick=openBoard;
     document.getElementById('closeBoard').onclick=()=>leaderboard.style.display='none';
     
+
+    window.addEventListener('resize',()=>{viewportWidth=window.innerWidth;});
+
+    // Precarga explícita: evita que monster.png aparezca tarde durante la partida.
+    const monsterPreload = new Image();
+    monsterPreload.onload = () => chaser.classList.add('loaded');
+    monsterPreload.onerror = () => {
+      console.warn('No se pudo cargar ./assets/images/monster.png. Verifica que el archivo exista en assets/images/.');
+      chaser.style.display='none';
+    };
+    monsterPreload.src = './assets/images/monster.png';
+
     if(username){const sd=localStorage.getItem('heysenSessionData');if(sd)userData=JSON.parse(sd);currentUser.textContent='👤 '+username+' · '+(userData?userData.total:0);userBar.style.display='block';}playMenuMusic();
   </script>
 </body>
