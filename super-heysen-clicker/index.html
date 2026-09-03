@@ -1,1 +1,905 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heysen Clicker</title>
+  <style>
 
+    /* =========================
+       PÁŁGINA
+    ========================= */
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+
+      width: 100%;
+      height: 100%;
+
+      overflow: hidden;
+
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      color: white;
+
+      background-image: url("/homelessbg.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      background-color: #1a1a2e;
+
+      transition: background-image 0.35s ease;
+    }
+
+    body.en-casa {
+      background-image: url("/homelessinterior.png");
+    }
+
+    body.en-casa #heysen {
+      width: 390px;
+      margin-top: 70px;
+    }
+
+
+    /* =========================
+       BOTON CASA
+    ========================= */
+
+    #botonCasa {
+      position: fixed;
+      top: 22px;
+      left: 22px;
+      z-index: 20;
+      padding: 12px 20px;
+      border: 2px solid #ffd700;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2f2f45, #171724);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,.4);
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    #botonCasa:hover {
+      transform: scale(1.06);
+      background: linear-gradient(135deg, #4a4a6b, #25253a);
+    }
+
+
+    /* =========================
+       CONTENIDO PRINCIPAL
+    ========================= */
+
+    .juego {
+      padding-top: 30px;
+    }
+
+
+    /* =========================
+       TÍłTULO
+    ========================= */
+
+    h1 {
+      margin: 10px 0;
+
+      font-size: 42px;
+
+      text-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(255, 215, 0, 0.5);
+
+      letter-spacing: 2px;
+    }
+
+
+    /* =========================
+       DINERO
+    ========================= */
+
+    #dinero {
+      font-size: 32px;
+      font-weight: bold;
+
+      margin: 20px;
+
+      padding: 12px 25px;
+
+      background: linear-gradient(135deg, #ffd700, #ffaa00);
+
+      color: #1a1a2e;
+
+      border-radius: 50px;
+
+      display: inline-block;
+
+      box-shadow:
+        0 4px 15px rgba(255, 215, 0, 0.4),
+        0 0 30px rgba(255, 215, 0, 0.2);
+
+      text-shadow: none;
+    }
+
+
+    /* =========================
+       HEYSEN
+    ========================= */
+
+    #heysen {
+
+      width: 320px;
+
+      margin-top: 120px;
+
+      cursor: pointer;
+
+      user-select: none;
+      -webkit-user-drag: none;
+
+      touch-action: manipulation;
+
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+
+      transition: transform 0.1s ease;
+    }
+
+    #heysen:hover {
+      transform: scale(1.03);
+    }
+
+    /* Animacion de cantar */
+    #heysen.cantando {
+      animation: cantar 0.5s ease infinite;
+    }
+
+    @keyframes cantar {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+      }
+      25% {
+        transform: scale(1.1) rotate(-5deg);
+      }
+      75% {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+
+
+    /* =========================
+       ANIMACIÓŁN
+    ========================= */
+
+    .bounce {
+      animation: rebote 0.25s ease;
+    }
+
+
+    @keyframes rebote {
+
+      0% {
+        transform: scale(1);
+      }
+
+      40% {
+        transform: scale(1.15);
+      }
+
+      70% {
+        transform: scale(0.95);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+
+    }
+
+
+    /* =========================
+       ICONO DE TIENDA
+    ========================= */
+
+    #shopIcon {
+
+      position: fixed;
+
+      right: 25px;
+      bottom: 25px;
+
+      width: 75px;
+      height: 75px;
+
+      cursor: pointer;
+
+      z-index: 10;
+
+      user-select: none;
+      -webkit-user-drag: none;
+
+      transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
+    }
+
+
+    #shopIcon:hover {
+
+      transform: scale(1.15) rotate(5deg);
+
+      filter: drop-shadow(0 6px 15px rgba(255, 215, 0, 0.5));
+    }
+
+
+    /* =========================
+       MENÚŁ DE TIENDA
+    ========================= */
+
+    #shop {
+
+      display: none;
+
+      position: fixed;
+
+      right: 25px;
+      bottom: 115px;
+
+      width: 340px;
+      max-height: 520px;
+
+      background: linear-gradient(145deg, #ffffff, #f0f0f0);
+      color: #1a1a2e;
+
+      border: 3px solid #ffd700;
+      border-radius: 16px;
+
+      padding: 20px;
+
+      overflow-y: auto;
+
+      z-index: 9;
+
+      box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.6),
+        0 0 40px rgba(255, 215, 0, 0.3);
+
+      backdrop-filter: blur(10px);
+    }
+
+
+    #shop h2 {
+      margin-top: 0;
+
+      font-size: 28px;
+
+      color: #1a1a2e;
+
+      text-align: center;
+
+      padding-bottom: 10px;
+
+      border-bottom: 2px solid #ffd700;
+    }
+
+
+    /* =========================
+       OBJETOS
+    ========================= */
+
+    .item {
+
+      display: inline-block;
+
+      width: 105px;
+
+      margin: 10px;
+      padding: 12px;
+
+      background: linear-gradient(145deg, #ffffff, #e8e8e8);
+
+      border: 2px solid #ddd;
+      border-radius: 12px;
+
+      cursor: grab;
+
+      user-select: none;
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+
+
+    .item:hover {
+
+      transform: scale(1.08) translateY(-3px);
+
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+
+      border-color: #ffd700;
+    }
+
+
+    .item:active {
+
+      cursor: grabbing;
+    }
+
+
+    .item img {
+
+      width: 70px;
+      height: 70px;
+
+      object-fit: contain;
+    }
+
+
+    .item p {
+
+      margin: 6px 0 4px 0;
+
+      font-weight: 600;
+
+      font-size: 14px;
+    }
+
+    .item strong {
+      color: #ff6b6b;
+
+      font-size: 16px;
+    }
+
+
+    /* =========================
+       SPOT
+    ========================= */
+
+    #spot {
+
+      margin: 25px auto;
+
+      width: 270px;
+      height: 130px;
+
+      border: 3px dashed #aaa;
+
+      border-radius: 16px;
+
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+
+      background: linear-gradient(145deg, #f8f8f8, #e8e8e8);
+
+      color: #666;
+
+      font-weight: 600;
+
+      transition: all 0.2s ease;
+    }
+
+
+    #spot.dragover {
+
+      background: linear-gradient(145deg, #ffd700, #ffaa00);
+
+      border-color: #1a1a2e;
+
+      color: #1a1a2e;
+
+      transform: scale(1.02);
+    }
+
+
+    #spot img {
+
+      width: 70px;
+      height: 70px;
+
+      object-fit: contain;
+
+      margin: 5px;
+    }
+
+
+    /* =========================
+       TOTAL
+    ========================= */
+
+    #total {
+
+      font-size: 24px;
+
+      margin: 15px;
+
+      font-weight: bold;
+
+      color: #1a1a2e;
+    }
+
+
+    /* =========================
+       BOTÓŁN
+    ========================= */
+
+    #comprar {
+
+      padding: 14px 30px;
+
+      font-size: 19px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      border: none;
+
+      border-radius: 50px;
+
+      background: linear-gradient(135deg, #ffd700, #ffaa00);
+
+      color: #1a1a2e;
+
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+
+      transition: all 0.2s ease;
+    }
+
+
+    #comprar:hover {
+
+      background: linear-gradient(135deg, #ffaa00, #ff8800);
+
+      transform: translateY(-2px);
+
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.6);
+    }
+
+    #comprar:active {
+      transform: translateY(0);
+    }
+
+
+    /* =========================
+       INVENTARIO
+    ========================= */
+
+    #inventario {
+
+      margin: 25px;
+
+      padding: 15px;
+
+      background: rgba(255, 255, 255, 0.1);
+
+      border-radius: 12px;
+    }
+
+    #inventario h3 {
+      margin-top: 0;
+
+      color: #ffd700;
+
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+
+    .inventarioItem {
+
+      display: inline-block;
+
+      margin: 6px;
+      padding: 10px;
+
+      background: linear-gradient(145deg, #333, #222);
+
+      border-radius: 10px;
+
+      border: 2px solid #ffd700;
+
+      transition: transform 0.2s ease;
+    }
+
+    .inventarioItem:hover {
+      transform: scale(1.05);
+    }
+
+
+    .inventarioItem img {
+
+      width: 50px;
+      height: 50px;
+
+      object-fit: contain;
+    }
+
+    .inventarioItem div {
+      color: white;
+
+      font-size: 13px;
+
+      margin-top: 5px;
+
+      font-weight: 600;
+    }
+
+    /* Nota musical flotante */
+    .nota-musical {
+      position: fixed;
+      font-size: 30px;
+      pointer-events: none;
+      animation: flotar 1.5s ease-out forwards;
+      z-index: 100;
+    }
+
+    @keyframes flotar {
+      0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(360deg);
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- BOTON CASA -->
+  <button id="botonCasa" type="button">🏠 Casa</button>
+
+  <!-- CONTENIDO DEL JUEGO -->
+  <div class="juego">
+    <h1>🧑‍🏫 Heysen Clicker</h1>
+
+    <div id="dinero">
+      💰 Dinero:
+      <span id="dineroCantidad">0</span>
+    </div>
+
+    <p style="font-size: 18px; margin: 25px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
+      ¡Haz clic en Heysen para ganar dinero!
+    </p>
+
+    <!-- HEYSEN -->
+    <img
+      id="heysen"
+      src="/HeysenRamos.png"
+      alt="Heysen Ramos"
+    >
+  </div>
+
+  <!-- =========================
+       ICONO DE TIENDA
+  ========================= -->
+  <img
+    id="shopIcon"
+    src="/ShopIcon.png"
+    alt="Tienda"
+  >
+
+  <!-- =========================
+       TIENDA
+  ========================= -->
+  <div id="shop">
+    <h2>🛒 Tienda</h2>
+
+    <p>
+      Arrastra objetos al cuadro de compra.
+    </p>
+
+    <!-- COMIDA -->
+    <div
+      class="item"
+      draggable="true"
+      data-price="25"
+      data-name="Comida"
+      data-image="/Comida.png"
+    >
+      <img src="/Comida.png" alt="Comida">
+      <p>🥪 Comida</p>
+      <strong>$25</strong>
+    </div>
+
+    <!-- SILLA -->
+    <div
+      class="item"
+      draggable="true"
+      data-price="50"
+      data-name="Silla"
+      data-image="/Silla.png"
+    >
+      <img src="/Silla.png" alt="Silla">
+      <p>🪑 Silla</p>
+      <strong>$50</strong>
+    </div>
+
+    <!-- LIBRO -->
+    <div
+      class="item"
+      draggable="true"
+      data-price="100"
+      data-name="Libro"
+      data-image="/Libro.png"
+    >
+      <img src="/Libro.png" alt="Libro">
+      <p>📚 Libro</p>
+      <strong>$100</strong>
+    </div>
+
+    <!-- SPOT -->
+    <div
+      id="spot"
+      ondragover="permitirDrop(event)"
+      ondrop="soltarObjeto(event)"
+    >
+      🛒 Arrastra aquí
+    </div>
+
+    <!-- TOTAL -->
+    <div id="total">
+      Total:
+      $<span id="totalCantidad">0</span>
+    </div>
+
+    <!-- COMPRAR -->
+    <button id="comprar">
+      🛍️ Comprar
+    </button>
+
+    <!-- INVENTARIO -->
+    <h3>🎒 Inventario</h3>
+    <div id="inventario"></div>
+  </div>
+
+  <!-- AUDIOS -->
+  <audio id="audioCantar" preload="auto">
+    <source src="https://www.myinstants.com/media/sounds/funny-chinese-singing-meme-mp3.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="audioEnrique" preload="auto">
+    <source src="https://www.myinstants.com/media/sounds/enrique.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="audioClickHeysen" preload="auto">
+    <source src="https://www.myinstants.com/media/sounds/mouse-clicking-1.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="audioInterfaz" preload="auto">
+    <source src="https://www.myinstants.com/media/sounds/tf2-button-click-release.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
+  <script>
+    /* =========================
+       SONIDOS
+    ========================= */
+    const audioCantar = document.getElementById("audioCantar");
+    const audioEnrique = document.getElementById("audioEnrique");
+    const audioClickHeysen = document.getElementById("audioClickHeysen");
+    const audioInterfaz = document.getElementById("audioInterfaz");
+    const botonCasa = document.getElementById("botonCasa");
+
+    const probabilidadCantar = 0.3;
+    const probabilidadEnrique = 0.15;
+
+    function reproducir(audio) {
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+    }
+
+    function sonidoInterfaz() {
+      reproducir(audioInterfaz);
+    }
+
+    botonCasa.addEventListener("click", function() {
+      sonidoInterfaz();
+      document.body.classList.toggle("en-casa");
+      const dentro = document.body.classList.contains("en-casa");
+      botonCasa.textContent = dentro ? "🚪 Salir" : "🏠 Casa";
+    });
+
+    /* =========================
+       DINERO
+    ========================= */
+    let dinero = 0;
+
+    const heysen = document.getElementById("heysen");
+    const dineroCantidad = document.getElementById("dineroCantidad");
+
+    heysen.addEventListener("click", function() {
+      dinero++;
+      dineroCantidad.textContent = dinero;
+
+      reproducir(audioClickHeysen);
+
+      heysen.classList.remove("bounce");
+      void heysen.offsetWidth;
+      heysen.classList.add("bounce");
+
+      if (Math.random() < probabilidadEnrique) {
+        hacerEnrique();
+      } else if (Math.random() < probabilidadCantar) {
+        hacerCantar();
+      }
+    });
+
+    function hacerCantar() {
+      reproducir(audioCantar);
+      heysen.classList.add("cantando");
+      crearNotasMusicales();
+      setTimeout(() => heysen.classList.remove("cantando"), 1500);
+    }
+
+    function hacerEnrique() {
+      reproducir(audioEnrique);
+      heysen.classList.add("cantando");
+      crearNotasMusicales();
+      setTimeout(() => heysen.classList.remove("cantando"), 1500);
+    }
+
+    function crearNotasMusicales() {
+      const notas = ['🎵', '🎶', '♪', '♫'];
+
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const nota = document.createElement('div');
+          nota.className = 'nota-musical';
+          nota.textContent = notas[Math.floor(Math.random() * notas.length)];
+
+          const rect = heysen.getBoundingClientRect();
+          const left = rect.left + Math.random() * rect.width;
+          const top = rect.top + Math.random() * (rect.height / 2);
+
+          nota.style.left = left + 'px';
+          nota.style.top = top + 'px';
+
+          document.body.appendChild(nota);
+
+          setTimeout(() => {
+            nota.remove();
+          }, 1500);
+        }, i * 200);
+      }
+    }
+
+    /* =========================
+       TIENDA
+    ========================= */
+    const shopIcon = document.getElementById("shopIcon");
+    const shop = document.getElementById("shop");
+
+    shopIcon.addEventListener("click", function() {
+      sonidoInterfaz();
+      if (shop.style.display === "block") {
+        shop.style.display = "none";
+      } else {
+        shop.style.display = "block";
+      }
+    });
+
+    /* =========================
+       DRAG & DROP
+    ========================= */
+    let objetosSeleccionados = [];
+    const items = document.querySelectorAll(".item");
+
+    items.forEach(function(item) {
+      item.addEventListener("click", sonidoInterfaz);
+      item.addEventListener("dragstart", function(event) {
+        event.dataTransfer.setData("text/plain", item.dataset.name);
+      });
+    });
+
+    function permitirDrop(event) {
+      event.preventDefault();
+      document.getElementById("spot").classList.add("dragover");
+    }
+
+    function soltarObjeto(event) {
+      event.preventDefault();
+      const spot = document.getElementById("spot");
+      spot.classList.remove("dragover");
+
+      const nombre = event.dataTransfer.getData("text/plain");
+      const item = document.querySelector(`.item[data-name="${nombre}"]`);
+
+      if (!item) return;
+
+      const precio = Number(item.dataset.price);
+      objetosSeleccionados.push({
+        name: item.dataset.name,
+        price: precio,
+        image: item.dataset.image
+      });
+
+      actualizarTotal();
+      mostrarObjetosEnSpot();
+    }
+
+    /* =========================
+       TOTAL
+    ========================= */
+    function actualizarTotal() {
+      let total = 0;
+      objetosSeleccionados.forEach(function(objeto) {
+        total += objeto.price;
+      });
+      document.getElementById("totalCantidad").textContent = total;
+    }
+
+    /* =========================
+       SPOT
+    ========================= */
+    function mostrarObjetosEnSpot() {
+      const spot = document.getElementById("spot");
+      spot.innerHTML = "";
+
+      objetosSeleccionados.forEach(function(objeto) {
+        const imagen = document.createElement("img");
+        imagen.src = objeto.image;
+        imagen.alt = objeto.name;
+        spot.appendChild(imagen);
+      });
+    }
+
+    /* =========================
+       COMPRAR
+    ========================= */
+    document.getElementById("comprar").addEventListener("click", function() {
+      sonidoInterfaz();
+
+      if (objetosSeleccionados.length === 0) {
+        alert("🚫 ¡No has seleccionado ningún objeto!");
+        return;
+      }
+
+      let total = 0;
+      objetosSeleccionados.forEach(function(objeto) {
+        total += objeto.price;
+      });
+
+      if (dinero < total) {
+        alert("😭 No tienes suficiente dinero");
+        return;
+      }
+
+      dinero -= total;
+      dineroCantidad.textContent = dinero;
+
+      const inventario = document.getElementById("inventario");
+      objetosSeleccionados.forEach(function(objeto) {
+        const nuevoObjeto = document.createElement("div");
+        nuevoObjeto.className = "inventarioItem";
+
+        const imagen = document.createElement("img");
+        imagen.src = objeto.image;
+        imagen.alt = objeto.name;
+        nuevoObjeto.appendChild(imagen);
+
+        const nombre = document.createElement("div");
+        nombre.textContent = objeto.name;
+        nuevoObjeto.appendChild(nombre);
+
+        inventario.appendChild(nuevoObjeto);
+      });
+
+      objetosSeleccionados = [];
+      actualizarTotal();
+      document.getElementById("spot").innerHTML = "🛒 Arrastra aquí";
+
+      alert("✅ ¡Compra realizada! 🛍️");
+    });
+  </script>
+</body>
+</html>
