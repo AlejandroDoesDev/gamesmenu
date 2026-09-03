@@ -1,225 +1,24 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The web site of lukesolorzano</title>
-
-    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
-
-    <style>
-      :root {
-        --bg: #0f172a;
-        --card-bg: #1e293b;
-        --text: #e2e8f0;
-        --accent: #38bdf8;
-        --accent-2: #22d3ee;
-        --muted: #94a3b8;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        background: linear-gradient(135deg, var(--bg), #0b1220);
-        color: var(--text);
-        line-height: 1.6;
-      }
-
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 2rem 1rem 4rem;
-      }
-
-      header {
-        text-align: center;
-        margin-bottom: 2.5rem;
-      }
-
-      h1 {
-        font-size: 2.2rem;
-        margin: 0 0 0.5rem;
-        background: linear-gradient(90deg, var(--accent), var(--accent-2));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-
-      .subtitle {
-        color: var(--muted);
-        font-size: 1rem;
-      }
-
-      h2 {
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
-        font-size: 1.6rem;
-      }
-
-      .games-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 1rem;
-      }
-
-      .game-card {
-        background: var(--card-bg);
-        border: 1px solid rgba(255,255,255,0.06);
-        border-radius: 12px;
-        padding: 1rem;
-        text-decoration: none;
-        color: inherit;
-        transition:
-          transform 0.15s ease,
-          box-shadow 0.15s ease,
-          border-color 0.15s ease;
-        display: block;
-      }
-
-      .game-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-        border-color: rgba(56, 189, 248, 0.4);
-      }
-
-      .game-title {
-        font-weight: 700;
-        font-size: 1.1rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .game-desc {
-        font-size: 0.9rem;
-        color: var(--muted);
-      }
-
-      .section-note {
-        color: var(--muted);
-        font-size: 0.9rem;
-        margin-top: 0.25rem;
-      }
-
-      .heysen-section {
-        margin-top: 2.5rem;
-        background:
-          linear-gradient(
-            135deg,
-            rgba(56,189,248,0.08),
-            rgba(34,211,238,0.05)
-          );
-        border: 1px solid rgba(56, 189, 248, 0.25);
-        border-radius: 12px;
-        padding: 1.25rem;
-      }
-
-      .heysen-section h2 {
-        margin-top: 0;
-      }
-
-      .tutor-img {
-        margin-top: 2.5rem;
-        text-align: center;
-      }
-
-      .tutor-img img {
-        max-width: 100%;
-        height: auto;
-        border-radius: 12px;
-        border: 1px solid rgba(255,255,255,0.08);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      }
-
-      footer {
-        margin-top: 3rem;
-        text-align: center;
-        color: var(--muted);
-        font-size: 0.85rem;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-
-      <header>
-        <h1>Bienvenido a mi página</h1>
-
-        <p class="subtitle">
-          Yo hago juegos, y estoy intentando hacer uno en GitHub Pages
-        </p>
-
-        <p class="subtitle">
-          ¡Más juegos próximamente!
-        </p>
-      </header>
-
-      <!-- Otros juegos -->
-      <h2>🎮 Otros juegos</h2>
-
-      <div class="games-grid">
-        <p class="section-note">
-          Próximamente más juegos aquí.
-        </p>
-      </div>
-
-      <!-- Juegos de Heysen -->
-      <div class="heysen-section">
-
-        <h2>🎮 Juegos de Heysen</h2>
-
-        <div class="games-grid">
-
-          <!-- Heysen Clicker -->
-          <a class="game-card" href="/heysenhistory">
-            <div class="game-title">
-              Heysen Clicker
-            </div>
-
-            <div class="game-desc">
-              Un clicker inspirado en Heysen.
-            </div>
-
-            <div class="section-note">
-              🕹️ Jugar ahora
-            </div>
-          </a>
-
-          <!-- Heysen Escape - Job -->
-          <a class="game-card" href="/gamesmenu/heysen-escape/">
-            <div class="game-title">
-              Heysen
-            </div>
-
-            <div class="game-desc">
-              Nuevo juego de Heysen.
-            </div>
-
-            <div class="section-note">
-              🚀 Jugar ahora
-            </div>
-          </a>
-
-        </div>
-      </div>
-
-      <!-- Imagen de Heysen -->
-      <div class="tutor-img">
-
-        <img
-          src="assets/images/HeysenIdle.png"
-          alt="EL MEJOR TUTOR, HEYSEN RAMOS"
-        >
-
-        <p class="section-note">
-          EL MEJOR TUTOR, HEYSEN RAMOS
-        </p>
-
-      </div>
-
-    </div>
-  </body>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A.D.D · Game Lab</title>
+<style>
+:root{--bg:#07111f;--panel:#102238;--line:#61d6ff;--ink:#e7f6ff;--muted:#9ab2c4;--violet:#b498ff;--lime:#8ff4b4}*{box-sizing:border-box}html{scroll-behavior:smooth}body{min-height:100vh;margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,sans-serif;overflow-x:hidden}body:before{content:"";position:fixed;z-index:-2;inset:0;background:radial-gradient(circle at 12% 2%,#193f64,transparent 28%),radial-gradient(circle at 90% 20%,#2e1d57,transparent 27%),linear-gradient(140deg,#07111f,#0a192b 70%,#07111f)}body:after{content:"";position:fixed;z-index:-1;inset:0;opacity:.32;background-image:linear-gradient(rgba(112,213,255,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(112,213,255,.22) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(#000,transparent 87%);pointer-events:none}.shell{width:min(1120px,calc(100% - 34px));margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:24px 0 13px;border-bottom:1px solid rgba(113,210,255,.2)}.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.07em}.brand-mark{display:grid;place-items:center;width:36px;height:36px;color:#07111e;border:1px solid #adf0ff;border-radius:8px;background:linear-gradient(145deg,#c3f7ff,#55b9f4);box-shadow:0 0 24px rgba(82,207,255,.4)}.dev{color:var(--lime);font:12px ui-monospace,Consolas,monospace;letter-spacing:.08em}.status{color:#bbf7d0;font:12px ui-monospace,monospace}.status:before{content:"";display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#6bff94;box-shadow:0 0 10px #6bff94}
+.hero{display:grid;grid-template-columns:1.12fr .88fr;gap:24px;padding:72px 0 48px}.eyebrow{margin:0 0 13px;color:var(--line);font:700 12px ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase}.eyebrow:before{content:"// ";color:var(--violet)}h1{max-width:720px;margin:0;font-size:clamp(2.5rem,6vw,5.25rem);line-height:.98;letter-spacing:-.065em}.accent{color:var(--line);text-shadow:0 0 30px rgba(98,220,255,.3)}.lead{max-width:580px;margin:22px 0 0;color:#b5c8d8;font-size:1.07rem}.cta{display:inline-flex;gap:9px;align-items:center;margin-top:28px;padding:11px 16px;color:#08111e;border:1px solid #bcf2ff;border-radius:6px;background:linear-gradient(135deg,#c6f8ff,#62d6fc);font-weight:800;text-decoration:none;box-shadow:0 8px 25px rgba(70,202,255,.18);transition:.2s}.cta:hover{transform:translateY(-2px);box-shadow:0 13px 33px rgba(70,202,255,.3)}
+.terminal{position:relative;overflow:hidden;align-self:center;border:1px solid rgba(131,213,255,.35);border-radius:10px;background:rgba(6,15,27,.82);box-shadow:0 20px 50px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.06)}.terminal:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent,rgba(111,230,255,.07),transparent);transform:translateY(-100%);animation:scan 5s linear infinite;pointer-events:none}.terminal-head{padding:11px 14px;border-bottom:1px solid rgba(131,213,255,.15);color:#aac0d0;font:12px ui-monospace,monospace}.dot{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;background:#ff6969}.dot:nth-child(2){background:#ffcf5d}.dot:nth-child(3){background:#70df91}.terminal pre{min-height:228px;margin:0;padding:18px;color:#c7ddea;font:13px/1.8 ui-monospace,Consolas,monospace;white-space:pre-wrap}.cmd{color:var(--lime)}.key{color:var(--line)}.value{color:#e6d4ff}.blink{animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}@keyframes scan{to{transform:translateY(100%)}}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin:18px 0}.section-head h2,.about h2{margin:0;font-size:1.55rem;letter-spacing:-.04em}.section-head p{margin:0;color:var(--muted);font-size:.9rem}.games-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.game-card,.empty-card{position:relative;overflow:hidden;min-height:205px;padding:20px;border:1px solid rgba(138,209,245,.2);border-radius:10px;background:linear-gradient(145deg,rgba(25,48,70,.92),rgba(12,27,44,.92))}.game-card{display:flex;flex-direction:column;color:inherit;text-decoration:none;transition:.22s}.game-card:before{content:"";position:absolute;right:-40px;bottom:-42px;width:135px;height:135px;border:1px solid rgba(109,221,255,.22);border-radius:50%;box-shadow:0 0 0 18px rgba(109,221,255,.035),0 0 0 36px rgba(109,221,255,.025)}.game-card:hover{transform:translateY(-5px);border-color:rgba(110,225,255,.68);box-shadow:0 15px 34px rgba(0,0,0,.28)}.tag{width:max-content;margin-bottom:auto;padding:3px 7px;color:#a7f4ff;border:1px solid rgba(109,221,255,.3);border-radius:4px;background:rgba(72,189,241,.08);font:11px ui-monospace,monospace}.game-title{margin:28px 0 5px;font-size:1.25rem;font-weight:800}.game-desc,.empty-card{color:#9eb5c6;font-size:.91rem}.arrow{margin-top:16px;color:var(--line);font:700 13px ui-monospace,monospace}.empty-card{border-style:dashed;background:rgba(11,28,45,.35)}
+.about{display:grid;grid-template-columns:1fr 1.4fr;gap:22px;margin:42px 0;padding:23px;border:1px solid rgba(138,209,245,.18);border-radius:11px;background:rgba(11,27,44,.6)}.portrait{display:grid;min-height:180px;place-items:center;border:1px solid rgba(113,210,255,.19);border-radius:7px;background:radial-gradient(circle,#1b4b71,#0b1c2d 65%);overflow:hidden}.portrait img{max-width:120px;max-height:150px;filter:drop-shadow(0 9px 12px rgba(0,0,0,.42))}.about p{margin:8px 0;color:#adc1d0}.stats{display:flex;gap:26px;margin-top:21px}.stat strong{display:block;color:var(--line);font:800 1.3rem ui-monospace,monospace}.stat span,footer{color:#718a9d;font:12px ui-monospace,monospace}footer{padding:0 0 40px;text-align:center}
+@media(max-width:760px){.hero,.about{grid-template-columns:1fr;padding-top:45px}.games-grid{grid-template-columns:1fr}.status{display:none}.section-head{align-items:start;gap:8px;flex-direction:column}.about{margin-top:28px}.portrait{min-height:130px}}
+</style>
+</head>
+<body>
+<main class="shell">
+<nav class="topbar"><div class="brand"><div class="brand-mark">&lt;/&gt;</div><div>A.D.D<div class="dev">ALEJANDRODOESDEV</div></div></div><div class="status">SISTEMA EN LÍNEA</div></nav>
+<section class="hero"><div><p class="eyebrow">Indie game developer</p><h1>Construyo juegos con <span class="accent">ideas raras</span> y código.</h1><p class="lead">Este es el laboratorio de A.D.D (AlejandroDoesDev): prototipos, aventuras de Heysen y los próximos experimentos que lleguen a producción.</p><a class="cta" href="#juegos">Explorar proyectos <span>→</span></a></div><aside class="terminal"><div class="terminal-head"><i class="dot"></i><i class="dot"></i><i class="dot"></i>&nbsp; add@game-lab:~</div><pre><span class="cmd">$</span> whoami<br><span class="value">AlejandroDoesDev</span><br><span class="cmd">$</span> status --portfolio<br><span class="key">● online</span>  construyendo cosas<br><span class="cmd">$</span> ls ./games<br><span class="value">heysen-clicker/  heysen-escape/</span><br><span class="cmd">$</span> echo "Más juegos próximamente"<br><span class="key">Más juegos próximamente</span><br><span class="cmd">$</span> <span class="blink">█</span></pre></aside></section>
+<section id="juegos"><div class="section-head"><div><p class="eyebrow">01 / Proyectos</p><h2>Juegos de Heysen</h2></div><p>Selecciona un proyecto para jugar.</p></div><div class="games-grid"><a class="game-card" href="/heysenhistory"><span class="tag">CLICKER · WEB</span><div class="game-title">Heysen Clicker</div><div class="game-desc">Un clicker inspirado en Heysen. Sube cifras, desbloquea progreso y sigue pulsando.</div><div class="arrow">EJECUTAR JUEGO →</div></a><a class="game-card" href="/gamesmenu/heysen-escape/"><span class="tag">ARCADE · WEB</span><div class="game-title">Heysen Job Escape</div><div class="game-desc">Una carrera caótica para escapar de los obstáculos y acumular puntos.</div><div class="arrow">EJECUTAR JUEGO →</div></a><div class="empty-card"><span class="tag">EN DESARROLLO</span><div class="game-title">Siguiente prototipo</div><div class="game-desc">Aquí aparecerá el próximo experimento de A.D.D.</div></div></div></section>
+<section class="about"><div class="portrait"><img src="assets/images/HeysenIdle.png" alt="Heysen Ramos"></div><div><p class="eyebrow">02 / Sobre el laboratorio</p><h2>Hecho por <span class="accent">A.D.D</span></h2><p>AlejandroDoesDev crea juegos web pequeños, experimentales y hechos para jugar directamente desde el navegador. Este menú reúne cada proyecto en un solo lugar.</p><div class="stats"><div class="stat"><strong>02</strong><span>JUEGOS PUBLICADOS</span></div><div class="stat"><strong>∞</strong><span>IDEAS EN LA COLA</span></div></div></div></section>
+<footer>© 2026 A.D.D · AlejandroDoesDev · GAME LAB</footer>
+</main>
+</body>
 </html>
