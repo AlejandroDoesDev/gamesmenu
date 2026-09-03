@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The web site of lukesolorzano</title>
+
     <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+
     <style>
       :root {
         --bg: #0f172a;
@@ -71,7 +73,10 @@
         padding: 1rem;
         text-decoration: none;
         color: inherit;
-        transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease,
+          border-color 0.15s ease;
         display: block;
       }
 
@@ -100,7 +105,12 @@
 
       .heysen-section {
         margin-top: 2.5rem;
-        background: linear-gradient(135deg, rgba(56,189,248,0.08), rgba(34,211,238,0.05));
+        background:
+          linear-gradient(
+            135deg,
+            rgba(56,189,248,0.08),
+            rgba(34,211,238,0.05)
+          );
         border: 1px solid rgba(56, 189, 248, 0.25);
         border-radius: 12px;
         padding: 1.25rem;
@@ -131,46 +141,85 @@
       }
     </style>
   </head>
+
   <body>
     <div class="container">
+
       <header>
         <h1>Bienvenido a mi página</h1>
-        <p class="subtitle">Yo hago juegos, y estoy intentando hacer uno en Neocities.</p>
-        <p class="subtitle">¡Más juegos próximamente!</p>
+
+        <p class="subtitle">
+          Yo hago juegos, y estoy intentando hacer uno en GitHub Pages
+        </p>
+
+        <p class="subtitle">
+          ¡Más juegos próximamente!
+        </p>
       </header>
 
-      <!-- Otros juegos (no de Heysen) -->
+      <!-- Otros juegos -->
       <h2>🎮 Otros juegos</h2>
+
       <div class="games-grid">
-        <!-- Aquí puedes poner otros juegos que no sean de Heysen -->
-        <p class="section-note">Próximamente más juegos aquí.</p>
+        <p class="section-note">
+          Próximamente más juegos aquí.
+        </p>
       </div>
 
-      <!-- Sección separada: Juegos de Heysen -->
+      <!-- Juegos de Heysen -->
       <div class="heysen-section">
+
         <h2>🎮 Juegos de Heysen</h2>
+
         <div class="games-grid">
+
+          <!-- Heysen Clicker -->
           <a class="game-card" href="/heysenhistory">
-            <div class="game-title">Heysen Clicker</div>
-            <div class="game-desc">Un clicker inspirado en Heysen.</div>
-            <div class="section-note">🕹️ Jugar ahora</div>
+            <div class="game-title">
+              Heysen Clicker
+            </div>
+
+            <div class="game-desc">
+              Un clicker inspirado en Heysen.
+            </div>
+
+            <div class="section-note">
+              🕹️ Jugar ahora
+            </div>
           </a>
 
-          <a class="game-card" href="/heysenjob">
-            <div class="game-title">Heysen</div>
-            <div class="game-desc">Nuevo juego de Heysen.</div>
-            <div class="section-note">🚀 Jugar ahora</div>
+          <!-- Heysen Escape - Job -->
+          <a class="game-card" href="/gamesmenu/heysen-escape/">
+            <div class="game-title">
+              Heysen
+            </div>
+
+            <div class="game-desc">
+              Nuevo juego de Heysen.
+            </div>
+
+            <div class="section-note">
+              🚀 Jugar ahora
+            </div>
           </a>
+
         </div>
       </div>
 
+      <!-- Imagen de Heysen -->
       <div class="tutor-img">
-        <img 
-          src="/HeysenRamos.png" 
+
+        <img
+          src="/HeysenRamos.png"
           alt="EL MEJOR TUTOR, HEYSEN RAMOS"
         >
-        <p class="section-note">EL MEJOR TUTOR, HEYSEN RAMOS</p>
+
+        <p class="section-note">
+          EL MEJOR TUTOR, HEYSEN RAMOS
+        </p>
+
       </div>
+
     </div>
   </body>
 </html>
