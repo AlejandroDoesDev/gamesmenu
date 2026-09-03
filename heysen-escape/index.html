@@ -2,333 +2,2751 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+  >
+
   <title>Heysen Escape - Job</title>
+
+  <!-- Precargar solamente las imágenes importantes -->
   <link rel="preload" as="image" href="./assets/images/monster.png">
   <link rel="preload" as="image" href="./assets/images/HeysenIdle.png">
-  <link rel="preload" as="image" href="./assets/images/HeysenCrouch.png">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a15; font-family: Arial, sans-serif; touch-action: none; }
-    #gameContainer { position: relative; width: 100%; height: 100%; }
-    #background { position: absolute; inset: 0; width: 200%; background: url("assets/images/skybg.png") center / cover repeat-x; z-index: 1; }
-    #player { position: absolute; width: 80px; height: 100px; left: 50%; transform: translateX(-50%); bottom: 120px; background: url("assets/images/HeysenIdle.png") center / contain no-repeat; z-index: 10; }
-    #player.crouching { background-image: url("assets/images/HeysenCrouch.png"); height: 60px; }
-    #floor { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; background: linear-gradient(#3a3a5a,#1a1a3a); border-top: 4px solid #ffd700; z-index: 1; }
-    .obstacle { position: absolute; background: url("assets/images/jobjobsahur.gif") center / 100% 100% no-repeat; z-index: 5; }
-    .obstacle.blue { filter: hue-rotate(180deg) saturate(2); }
-    #chaser { position: absolute; width: 200px; height: 200px; left: 50%; bottom: 120px; margin-left: -250px; transform: translateX(-50%); background: url("./assets/images/monster.png") center / contain no-repeat; z-index: 8; will-change: margin-left; }
-    #score { position: fixed; top: 20px; left: 20px; color: white; font-size: 28px; font-weight: bold; text-shadow: 3px 3px 6px #000; z-index: 100; }
-    #userBar { position: fixed; top: 18px; right: 20px; z-index: 100; color: white; font-weight: bold; }
-    #leaderboardBtn, #logoutBtn { margin-left: 8px; padding: 9px 13px; border: 0; border-radius: 10px; font-weight: bold; cursor: pointer; background: #ffd700; color: #1a1a2e; }
-    #logoutBtn { background: #f35b5b; color: white; }
-    .panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(450px, 92vw); padding: 30px; text-align: center; color: white; background: linear-gradient(145deg,#1a1a2e,#0f0f1a); border: 4px solid #ffd700; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.7); z-index: 200; }
-    .panel h1 { color: #ffd700; margin-bottom: 14px; }
-    .panel p { color: #ddd; margin: 10px 0; }
-    .panel input { width: 100%; padding: 13px; margin: 7px 0; border: 0; border-radius: 10px; font-size: 17px; }
-    .panel button { padding: 13px 22px; border: 0; border-radius: 50px; font-weight: bold; font-size: 17px; cursor: pointer; color: #1a1a2e; background: linear-gradient(135deg,#ffd700,#ffaa00); margin: 6px 3px; }
-    #gameOver, #leaderboard, #registerBox, #loginBox { display: none; }
-    #gameOver h1 { color: #ff6b6b; }
-    .instructions { margin-top: 15px; padding: 12px; background: rgba(255,255,255,.1); border-radius: 10px; font-size: 14px; line-height: 1.55; }
-    #leaderboard ol { text-align: left; max-height: 260px; overflow-y: auto; margin: 16px 0 20px; padding-left: 30px; }
-    #leaderboard li { padding: 7px; border-bottom: 1px solid rgba(255,255,255,.15); }
-    #leaderboard .empty { list-style: none; margin-left: -30px; text-align: center; color: #ccc; }
-    .secondary { background: #444 !important; color: white !important; }
-    .warning { color: #ff9c9c !important; min-height: 20px; font-size: 14px; }
-    .loading { color: #ffd700; font-weight: bold; margin-top: 10px; min-height: 20px; }
-    
-    #touchControls { position: fixed; bottom: 20px; left: 0; width: 100%; height: 120px; z-index: 150; display: none; pointer-events: none; }
-    .touchBtn { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,215,0,0.35); border: 3px solid #ffd700; color: white; font-size: 40px; font-weight: bold; display: flex; align-items: center; justify-content: center; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
-    .touchBtn:active, .touchBtn.active { background: rgba(255,215,0,0.7); }
-    #jumpBtn { left: 30px; bottom: 10px; }
-    #duckBtn { right: 30px; bottom: 10px; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #0a0a15;
+      font-family: Arial, sans-serif;
+      touch-action: none;
+    }
+
+    #gameContainer {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    #background {
+      position: absolute;
+      inset: 0;
+      width: 200%;
+      background:
+        url("assets/images/skybg.png")
+        center / cover
+        repeat-x;
+      z-index: 1;
+      will-change: left;
+    }
+
+    #player {
+      position: absolute;
+      width: 80px;
+      height: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 120px;
+
+      background:
+        url("assets/images/HeysenIdle.png")
+        center / contain
+        no-repeat;
+
+      z-index: 10;
+      will-change: bottom;
+    }
+
+    #player.crouching {
+      background-image:
+        url("assets/images/HeysenCrouch.png");
+
+      height: 60px;
+    }
+
+    #floor {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+
+      width: 100%;
+      height: 120px;
+
+      background:
+        linear-gradient(#3a3a5a, #1a1a3a);
+
+      border-top: 4px solid #ffd700;
+      z-index: 1;
+    }
+
+    .obstacle {
+      position: absolute;
+
+      background:
+        url("assets/images/jobjobsahur.gif")
+        center / 100% 100%
+        no-repeat;
+
+      z-index: 5;
+      will-change: transform;
+    }
+
+    .obstacle.blue {
+      filter:
+        hue-rotate(180deg)
+        saturate(2);
+    }
+
+    #chaser {
+      position: absolute;
+
+      width: 200px;
+      height: 200px;
+
+      left: 50%;
+      bottom: 120px;
+
+      margin-left: -250px;
+
+      transform: translateX(-50%);
+
+      background:
+        url("./assets/images/monster.png")
+        center / contain
+        no-repeat;
+
+      z-index: 8;
+
+      will-change: margin-left;
+    }
+
+    #score {
+      position: fixed;
+
+      top: 20px;
+      left: 20px;
+
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+
+      text-shadow:
+        3px 3px 6px #000;
+
+      z-index: 100;
+    }
+
+    #userBar {
+      position: fixed;
+
+      top: 18px;
+      right: 20px;
+
+      z-index: 100;
+
+      color: white;
+      font-weight: bold;
+    }
+
+    #leaderboardBtn,
+    #logoutBtn {
+      margin-left: 8px;
+
+      padding: 9px 13px;
+
+      border: 0;
+      border-radius: 10px;
+
+      font-weight: bold;
+      cursor: pointer;
+
+      background: #ffd700;
+      color: #1a1a2e;
+    }
+
+    #logoutBtn {
+      background: #f35b5b;
+      color: white;
+    }
+
+    .panel {
+      position: fixed;
+
+      top: 50%;
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      width: min(450px, 92vw);
+
+      max-height: 90vh;
+      overflow-y: auto;
+
+      padding: 30px;
+
+      text-align: center;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          145deg,
+          #1a1a2e,
+          #0f0f1a
+        );
+
+      border: 4px solid #ffd700;
+      border-radius: 20px;
+
+      box-shadow:
+        0 10px 40px rgba(0, 0, 0, .7);
+
+      z-index: 200;
+    }
+
+    .panel h1 {
+      color: #ffd700;
+      margin-bottom: 14px;
+    }
+
+    .panel p {
+      color: #ddd;
+      margin: 10px 0;
+    }
+
+    .panel input {
+      width: 100%;
+
+      padding: 13px;
+      margin: 7px 0;
+
+      border: 0;
+      border-radius: 10px;
+
+      font-size: 17px;
+    }
+
+    .panel button {
+      padding: 13px 22px;
+
+      border: 0;
+      border-radius: 50px;
+
+      font-weight: bold;
+      font-size: 17px;
+
+      cursor: pointer;
+
+      color: #1a1a2e;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffd700,
+          #ffaa00
+        );
+
+      margin: 6px 3px;
+    }
+
+    #gameOver,
+    #leaderboard,
+    #registerBox,
+    #loginBox {
+      display: none;
+    }
+
+    #gameOver h1 {
+      color: #ff6b6b;
+    }
+
+    .instructions {
+      margin-top: 15px;
+
+      padding: 12px;
+
+      background:
+        rgba(255, 255, 255, .1);
+
+      border-radius: 10px;
+
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    #leaderboard ol {
+      text-align: left;
+
+      max-height: 260px;
+      overflow-y: auto;
+
+      margin: 16px 0 20px;
+      padding-left: 30px;
+    }
+
+    #leaderboard li {
+      padding: 7px;
+
+      border-bottom:
+        1px solid
+        rgba(255, 255, 255, .15);
+    }
+
+    #leaderboard .empty {
+      list-style: none;
+
+      margin-left: -30px;
+
+      text-align: center;
+
+      color: #ccc;
+    }
+
+    .secondary {
+      background: #444 !important;
+      color: white !important;
+    }
+
+    .warning {
+      color: #ff9c9c !important;
+
+      min-height: 20px;
+
+      font-size: 14px;
+    }
+
+    .loading {
+      color: #ffd700;
+
+      font-weight: bold;
+
+      margin-top: 10px;
+
+      min-height: 20px;
+    }
+
+    #touchControls {
+      position: fixed;
+
+      bottom: 20px;
+      left: 0;
+
+      width: 100%;
+      height: 120px;
+
+      z-index: 150;
+
+      display: none;
+
+      pointer-events: none;
+    }
+
+    .touchBtn {
+      position: absolute;
+
+      width: 100px;
+      height: 100px;
+
+      border-radius: 50%;
+
+      background:
+        rgba(255, 215, 0, .35);
+
+      border:
+        3px solid #ffd700;
+
+      color: white;
+
+      font-size: 40px;
+      font-weight: bold;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      pointer-events: auto;
+
+      touch-action: none;
+      user-select: none;
+
+      -webkit-user-select: none;
+
+      transition:
+        background .08s ease;
+    }
+
+    .touchBtn:active,
+    .touchBtn.active {
+      background:
+        rgba(255, 215, 0, .7);
+    }
+
+    #jumpBtn {
+      left: 30px;
+      bottom: 10px;
+    }
+
+    #duckBtn {
+      right: 30px;
+      bottom: 10px;
+    }
+
     @media (max-width: 768px) {
-      #touchControls { display: block; }
-      #score { font-size: 22px; top: 15px; left: 15px; }
-      #userBar { top: 12px; right: 15px; }
-      #leaderboardBtn, #logoutBtn { padding: 7px 10px; font-size: 14px; }
+
+      #touchControls {
+        display: block;
+      }
+
+      #score {
+        font-size: 22px;
+
+        top: 15px;
+        left: 15px;
+      }
+
+      #userBar {
+        top: 12px;
+        right: 15px;
+      }
+
+      #leaderboardBtn,
+      #logoutBtn {
+        padding: 7px 10px;
+        font-size: 14px;
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .touchBtn {
+        width: 85px;
+        height: 85px;
+
+        font-size: 34px;
+      }
     }
   </style>
 </head>
+
 <body>
+
   <div id="gameContainer">
+
     <div id="background"></div>
-    <div id="score">Puntos: 0</div>
-    <div id="userBar" style="display:none"><span id="currentUser"></span><button id="leaderboardBtn">🏆 Tabla</button><button id="logoutBtn">Salir</button></div>
-    <div id="player"></div><div id="chaser"></div><div id="floor"></div>
-    
+
+    <div id="score">
+      Puntos: 0
+    </div>
+
+    <div
+      id="userBar"
+      style="display:none"
+    >
+      <span id="currentUser"></span>
+
+      <button id="leaderboardBtn">
+        🏆 Tabla
+      </button>
+
+      <button id="logoutBtn">
+        Salir
+      </button>
+    </div>
+
+    <div id="player"></div>
+
+    <div id="chaser"></div>
+
+    <div id="floor"></div>
+
+
+    <!-- CONTROLES TÁCTILES -->
+
     <div id="touchControls">
-      <div id="jumpBtn" class="touchBtn">⬆</div>
-      <div id="duckBtn" class="touchBtn">⬇</div>
+
+      <div
+        id="jumpBtn"
+        class="touchBtn"
+      >
+        ⬆
+      </div>
+
+      <div
+        id="duckBtn"
+        class="touchBtn"
+      >
+        ⬇
+      </div>
+
     </div>
 
-    <div id="authScreen" class="panel">
-      <h1>🏃 Heysen Escape</h1>
-      <p>Regístrate o inicia sesión para guardar tus puntos globalmente.</p>
-      <button id="showLogin">🔐 Iniciar sesión</button>
-      <button id="showRegister" class="secondary">📝 Registrarse</button>
-      <button id="localModeBtn" style="background:linear-gradient(135deg,#6a6a6a,#4a4a4a);color:white;margin-top:12px;">🎮 Modo Local</button>
-      <div class="instructions">Tus datos se guardan en Google Sheets.</div>
+
+    <!-- LOGIN -->
+
+    <div
+      id="authScreen"
+      class="panel"
+    >
+
+      <h1>
+        🏃 Heysen Escape
+      </h1>
+
+      <p>
+        Regístrate o inicia sesión
+        para guardar tus puntos globalmente.
+      </p>
+
+      <button id="showLogin">
+        🔐 Iniciar sesión
+      </button>
+
+      <button
+        id="showRegister"
+        class="secondary"
+      >
+        📝 Registrarse
+      </button>
+
+      <button
+        id="localModeBtn"
+        style="
+          background:linear-gradient(135deg,#6a6a6a,#4a4a4a);
+          color:white;
+          margin-top:12px;
+        "
+      >
+        🎮 Modo Local
+      </button>
+
+      <div class="instructions">
+        Tus datos se guardan en Google Sheets.
+      </div>
+
     </div>
 
-    <div id="registerBox" class="panel">
-      <h1>📝 Registrarse</h1>
-      <input id="registerName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off">
-      <input id="registerPass" type="password" minlength="4" maxlength="32" placeholder="Contraseña (mínimo 4 caracteres)">
-      <p id="registerError" class="warning"></p>
-      <p id="registerLoading" class="loading"></p>
-      <button id="registerBtn">Crear cuenta</button><button class="secondary authBack">Volver</button>
+
+    <!-- REGISTRO -->
+
+    <div
+      id="registerBox"
+      class="panel"
+    >
+
+      <h1>
+        📝 Registrarse
+      </h1>
+
+      <input
+        id="registerName"
+        maxlength="16"
+        placeholder="Nombre de usuario"
+        autocomplete="off"
+      >
+
+      <input
+        id="registerPass"
+        type="password"
+        minlength="4"
+        maxlength="32"
+        placeholder="Contraseña (mínimo 4 caracteres)"
+      >
+
+      <p
+        id="registerError"
+        class="warning"
+      ></p>
+
+      <p
+        id="registerLoading"
+        class="loading"
+      ></p>
+
+      <button id="registerBtn">
+        Crear cuenta
+      </button>
+
+      <button
+        class="secondary authBack"
+      >
+        Volver
+      </button>
+
     </div>
 
-    <div id="loginBox" class="panel">
-      <h1>🔐 Iniciar sesión</h1>
-      <input id="loginName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off">
-      <input id="loginPass" type="password" maxlength="32" placeholder="Contraseña">
-      <p id="loginError" class="warning"></p>
-      <p id="loginLoading" class="loading"></p>
-      <button id="loginBtn">Entrar</button><button class="secondary authBack">Volver</button>
+
+    <!-- LOGIN -->
+
+    <div
+      id="loginBox"
+      class="panel"
+    >
+
+      <h1>
+        🔐 Iniciar sesión
+      </h1>
+
+      <input
+        id="loginName"
+        maxlength="16"
+        placeholder="Nombre de usuario"
+        autocomplete="off"
+      >
+
+      <input
+        id="loginPass"
+        type="password"
+        maxlength="32"
+        placeholder="Contraseña"
+      >
+
+      <p
+        id="loginError"
+        class="warning"
+      ></p>
+
+      <p
+        id="loginLoading"
+        class="loading"
+      ></p>
+
+      <button id="loginBtn">
+        Entrar
+      </button>
+
+      <button
+        class="secondary authBack"
+      >
+        Volver
+      </button>
+
     </div>
 
-    <div id="gameOver" class="panel">
-      <h1>💀 ¡Game Over!</h1>
-      <p>Puntaje: <span id="finalScore">0</span></p>
-      <p>Total: <span id="totalScore">0</span></p>
-      <button id="restartBtn">🔄 Jugar</button><button class="secondary openBoard">🏆 Tabla</button>
+
+    <!-- GAME OVER -->
+
+    <div
+      id="gameOver"
+      class="panel"
+    >
+
+      <h1>
+        💀 ¡Game Over!
+      </h1>
+
+      <p>
+        Puntaje:
+        <span id="finalScore">0</span>
+      </p>
+
+      <p>
+        Total:
+        <span id="totalScore">0</span>
+      </p>
+
+      <button id="restartBtn">
+        🔄 Jugar
+      </button>
+
+      <button
+        class="secondary openBoard"
+      >
+        🏆 Tabla
+      </button>
+
     </div>
 
-    <div id="leaderboard" class="panel">
-      <h1>🏆 Clasificación</h1>
+
+    <!-- CLASIFICACIÓN -->
+
+    <div
+      id="leaderboard"
+      class="panel"
+    >
+
+      <h1>
+        🏆 Clasificación
+      </h1>
+
       <ol id="leaderboardList"></ol>
-      <button id="closeBoard">Cerrar</button>
+
+      <button id="closeBoard">
+        Cerrar
+      </button>
+
     </div>
+
   </div>
 
-  <!-- Sonidos de muerte precargados -->
-  <audio id="death1" preload="auto" src="https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3"></audio>
-  <audio id="death2" preload="auto" src="https://www.myinstants.com/media/sounds/bone-crack.mp3"></audio>
-  <audio id="death3" preload="auto" src="https://www.myinstants.com/media/sounds/spongebob-fail.mp3"></audio>
-  <audio id="death4" preload="auto" src="https://www.myinstants.com/media/sounds/brain-fart.mp3"></audio>
-  <audio id="death5" preload="auto" src="https://www.myinstants.com/media/sounds/fart-with-reverb.mp3"></audio>
 
-  <audio id="menuMusic" loop src="https://www.myinstants.com/media/sounds/mii-channel-music.mp3"></audio>
-  <audio id="gameMusic" loop src="https://www.myinstants.com/media/sounds/dreamrunning_trim-1.mp3"></audio>
-  <audio id="jobSound" src="https://www.myinstants.com/media/sounds/steal-a-brainrot-job-job-job-sahur.mp3"></audio>
-  <audio id="jumpSound" src="https://www.myinstants.com/media/sounds/cartoon-jump.mp3"></audio>
+  <!--
+    SONIDOS
+    No se cargan todos al entrar.
+  -->
+
+  <audio
+    id="death1"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3"
+  ></audio>
+
+  <audio
+    id="death2"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/bone-crack.mp3"
+  ></audio>
+
+  <audio
+    id="death3"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/spongebob-fail.mp3"
+  ></audio>
+
+  <audio
+    id="death4"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/brain-fart.mp3"
+  ></audio>
+
+  <audio
+    id="death5"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/fart-with-reverb.mp3"
+  ></audio>
+
+  <audio
+    id="menuMusic"
+    preload="none"
+    loop
+    src="https://www.myinstants.com/media/sounds/mii-channel-music.mp3"
+  ></audio>
+
+  <audio
+    id="gameMusic"
+    preload="none"
+    loop
+    src="https://www.myinstants.com/media/sounds/dreamrunning_trim-1.mp3"
+  ></audio>
+
+  <audio
+    id="jobSound"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/steal-a-brainrot-job-job-job-sahur.mp3"
+  ></audio>
+
+  <audio
+    id="jumpSound"
+    preload="none"
+    src="https://www.myinstants.com/media/sounds/cartoon-jump.mp3"
+  ></audio>
+
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD3AOdO-qxiM0IPDw9kp0xH1Xk43lgdrk4-rP-5jbH4t2GXlFiJkqUYeNyXpVp-1uL/exec';
-    
-    const player = document.getElementById('player'), chaser = document.getElementById('chaser'), background = document.getElementById('background');
-    const scoreDisplay = document.getElementById('score'), userBar = document.getElementById('userBar'), currentUser = document.getElementById('currentUser');
-    const authScreen = document.getElementById('authScreen'), registerBox = document.getElementById('registerBox'), loginBox = document.getElementById('loginBox');
-    const gameOverScreen = document.getElementById('gameOver'), leaderboard = document.getElementById('leaderboard'), leaderboardList = document.getElementById('leaderboardList');
-    const menuMusic = document.getElementById('menuMusic'), gameMusic = document.getElementById('gameMusic'), jobSound = document.getElementById('jobSound'), jumpSound = document.getElementById('jumpSound');
+
+    /* =========================================
+       CONFIGURACIÓN
+    ========================================= */
+
+    const SCRIPT_URL =
+      'https://script.google.com/macros/s/AKfycbzD3AOdO-qxiM0IPDw9kp0xH1Xk43lgdrk4-rP-5jbH4t2GXlFiJkqUYeNyXpVp-1uL/exec';
+
+
+    /* =========================================
+       ELEMENTOS
+    ========================================= */
+
+    const player =
+      document.getElementById('player');
+
+    const chaser =
+      document.getElementById('chaser');
+
+    const background =
+      document.getElementById('background');
+
+    const scoreDisplay =
+      document.getElementById('score');
+
+    const userBar =
+      document.getElementById('userBar');
+
+    const currentUser =
+      document.getElementById('currentUser');
+
+    const authScreen =
+      document.getElementById('authScreen');
+
+    const registerBox =
+      document.getElementById('registerBox');
+
+    const loginBox =
+      document.getElementById('loginBox');
+
+    const gameOverScreen =
+      document.getElementById('gameOver');
+
+    const leaderboard =
+      document.getElementById('leaderboard');
+
+    const leaderboardList =
+      document.getElementById('leaderboardList');
+
+
+    /* =========================================
+       AUDIO
+    ========================================= */
+
+    const menuMusic =
+      document.getElementById('menuMusic');
+
+    const gameMusic =
+      document.getElementById('gameMusic');
+
+    const jobSound =
+      document.getElementById('jobSound');
+
+    const jumpSound =
+      document.getElementById('jumpSound');
+
     const deathSounds = [
+
       document.getElementById('death1'),
+
       document.getElementById('death2'),
+
       document.getElementById('death3'),
+
       document.getElementById('death4'),
+
       document.getElementById('death5')
+
     ];
-    let username = localStorage.getItem('heysenSession') || '', userData = null;
+
+
+    /* =========================================
+       ESTADO
+    ========================================= */
+
+    let username =
+      localStorage.getItem('heysenSession') || '';
+
+    let userData = null;
+
     let isLocalMode = false;
-    let localBestScore = parseInt(localStorage.getItem('heysenLocalBest') || '0');
-    let gameRunning = false, score = 0, gameSpeed = 6, bgX = 0, playerY = 0, velocityY = 0, jumping = false, ducking = false, chaserOffset = 250;
-    let obstacles = [], obstacleTimer = 0, scoreTimer = 0, jobSoundTimer = 0;
-    let lastFrame = 0, scoreAccumulator = 0, jobAccumulator = 0, spawnAccumulator = 0, animationFrame = 0;
-    let viewportWidth = window.innerWidth;
-    const keys = { up:false, down:false };
-    
-    const jumpBtn = document.getElementById('jumpBtn');
-    const duckBtn = document.getElementById('duckBtn');
-    
-    function hidePanels() { [authScreen, registerBox, loginBox].forEach(x => x.style.display='none'); }
-    function play(audio, rate=1, volume=1) { audio.pause(); audio.currentTime = 0; audio.playbackRate = rate; audio.volume = volume; audio.play().catch(()=>{}); }
-    function stop(audio) { audio.pause(); audio.currentTime = 0; }
-    function playMenuMusic() { stop(gameMusic); menuMusic.volume=.35; menuMusic.play().catch(()=>{}); }
-    function playGameMusic() { stop(menuMusic); gameMusic.volume=.45; gameMusic.play().catch(()=>{}); }
-    
-    async function callScript(action, params={}) {
-      const url = new URL(SCRIPT_URL);
-      url.searchParams.append('action', action);
-      for (const [k, v] of Object.entries(params)) url.searchParams.append(k, v);
-      const r = await fetch(url.toString(), { method: 'GET' });
-      const t = await r.json();
-      return t;
+
+    let localBestScore =
+      parseInt(
+        localStorage.getItem('heysenLocalBest') || '0',
+        10
+      );
+
+
+    let gameRunning = false;
+
+    let score = 0;
+
+    let gameSpeed = 6;
+
+    let bgX = 0;
+
+    let playerY = 0;
+
+    let velocityY = 0;
+
+    let jumping = false;
+
+    let ducking = false;
+
+    let chaserOffset = 250;
+
+
+    let obstacles = [];
+
+    let lastFrame = 0;
+
+    let scoreAccumulator = 0;
+
+    let jobAccumulator = 0;
+
+    let spawnAccumulator = 0;
+
+    let animationFrame = 0;
+
+
+    let viewportWidth =
+      window.innerWidth;
+
+
+    const keys = {
+      up: false,
+      down: false
+    };
+
+
+    /* =========================================
+       CONTROLES
+    ========================================= */
+
+    const jumpBtn =
+      document.getElementById('jumpBtn');
+
+    const duckBtn =
+      document.getElementById('duckBtn');
+
+
+    /* =========================================
+       FUNCIONES GENERALES
+    ========================================= */
+
+    function hidePanels() {
+
+      [
+        authScreen,
+        registerBox,
+        loginBox,
+        gameOverScreen,
+        leaderboard
+      ].forEach(
+        x => x.style.display = 'none'
+      );
+
     }
-    
-    document.addEventListener('keydown', e => { if(['w','W','ArrowUp'].includes(e.key)) keys.up=true; if(['s','S','ArrowDown'].includes(e.key)) keys.down=true; });
-    document.addEventListener('keyup', e => { if(['w','W','ArrowUp'].includes(e.key)) keys.up=false; if(['s','S','ArrowDown'].includes(e.key)) keys.down=false; });
-    
-    jumpBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keys.up=true; jumpBtn.classList.add('active'); });
-    jumpBtn.addEventListener('touchend', (e) => { e.preventDefault(); keys.up=false; jumpBtn.classList.remove('active'); });
-    jumpBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); keys.up=false; jumpBtn.classList.remove('active'); });
-    jumpBtn.addEventListener('mousedown', () => { keys.up=true; jumpBtn.classList.add('active'); });
-    jumpBtn.addEventListener('mouseup', () => { keys.up=false; jumpBtn.classList.remove('active'); });
-    jumpBtn.addEventListener('mouseleave', () => { keys.up=false; jumpBtn.classList.remove('active'); });
-    
-    duckBtn.addEventListener('touchstart', (e) => { e.preventDefault(); keys.down=true; duckBtn.classList.add('active'); });
-    duckBtn.addEventListener('touchend', (e) => { e.preventDefault(); keys.down=false; duckBtn.classList.remove('active'); });
-    duckBtn.addEventListener('touchcancel', (e) => { e.preventDefault(); keys.down=false; duckBtn.classList.remove('active'); });
-    duckBtn.addEventListener('mousedown', () => { keys.down=true; duckBtn.classList.add('active'); });
-    duckBtn.addEventListener('mouseup', () => { keys.down=false; duckBtn.classList.remove('active'); });
-    duckBtn.addEventListener('mouseleave', () => { keys.down=false; duckBtn.classList.remove('active'); });
-    
-    document.getElementById('showLogin').onclick = () => { authScreen.style.display='none'; loginBox.style.display='block'; };
-    document.getElementById('showRegister').onclick = () => { authScreen.style.display='none'; registerBox.style.display='block'; };
-    document.querySelectorAll('.authBack').forEach(b => b.onclick = () => { hidePanels(); authScreen.style.display='block'; });
-    
-    document.getElementById('registerBtn').onclick = async () => {
-      const name = document.getElementById('registerName').value.trim().replace(/[<>]/g,''), pass = document.getElementById('registerPass').value;
-      const error = document.getElementById('registerError'), loading = document.getElementById('registerLoading');
-      if(name.length<3) return error.textContent='Mínimo 3 caracteres.'; if(pass.length<4) return error.textContent='Mínimo 4 caracteres.';
-      loading.textContent = '⏳...';
-      try { const res = await callScript('register',{username:name,password:pass}); loading.textContent=''; if(res.success) { loginBox.style.display='block'; registerBox.style.display='none'; document.getElementById('loginName').value=name; } else error.textContent=res.error; }
-      catch(e) { loading.textContent=''; error.textContent='Error de conexión.'; }
+
+
+    function play(
+      audio,
+      rate = 1,
+      volume = 1
+    ) {
+
+      audio.pause();
+
+      audio.currentTime = 0;
+
+      audio.playbackRate = rate;
+
+      audio.volume = volume;
+
+      audio.play().catch(() => {});
+
+    }
+
+
+    function stop(audio) {
+
+      audio.pause();
+
+      audio.currentTime = 0;
+
+    }
+
+
+    function playMenuMusic() {
+
+      stop(gameMusic);
+
+      menuMusic.volume = .35;
+
+      menuMusic
+        .play()
+        .catch(() => {});
+
+    }
+
+
+    function playGameMusic() {
+
+      stop(menuMusic);
+
+      gameMusic.volume = .45;
+
+      gameMusic
+        .play()
+        .catch(() => {});
+
+    }
+
+
+    /* =========================================
+       GOOGLE APPS SCRIPT
+    ========================================= */
+
+    async function callScript(
+      action,
+      params = {}
+    ) {
+
+      const url =
+        new URL(SCRIPT_URL);
+
+      url.searchParams.set(
+        'action',
+        action
+      );
+
+      for (
+        const [key, value]
+        of Object.entries(params)
+      ) {
+
+        url.searchParams.set(
+          key,
+          value
+        );
+
+      }
+
+
+      const controller =
+        new AbortController();
+
+      const timeout =
+        setTimeout(
+          () => controller.abort(),
+          8000
+        );
+
+
+      try {
+
+        const response =
+          await fetch(
+            url.toString(),
+            {
+              method: 'GET',
+
+              cache: 'no-store',
+
+              signal:
+                controller.signal
+            }
+          );
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            'HTTP ' +
+            response.status
+          );
+
+        }
+
+
+        const text =
+          await response.text();
+
+
+        try {
+
+          return JSON.parse(text);
+
+        } catch {
+
+          throw new Error(
+            'El servidor no devolvió JSON.'
+          );
+
+        }
+
+      } finally {
+
+        clearTimeout(timeout);
+
+      }
+
+    }
+
+
+    /* =========================================
+       TECLADO
+    ========================================= */
+
+    document.addEventListener(
+      'keydown',
+      e => {
+
+        if (
+          ['w', 'W', 'ArrowUp']
+            .includes(e.key)
+        ) {
+
+          keys.up = true;
+
+        }
+
+
+        if (
+          ['s', 'S', 'ArrowDown']
+            .includes(e.key)
+        ) {
+
+          keys.down = true;
+
+        }
+
+      }
+    );
+
+
+    document.addEventListener(
+      'keyup',
+      e => {
+
+        if (
+          ['w', 'W', 'ArrowUp']
+            .includes(e.key)
+        ) {
+
+          keys.up = false;
+
+        }
+
+
+        if (
+          ['s', 'S', 'ArrowDown']
+            .includes(e.key)
+        ) {
+
+          keys.down = false;
+
+        }
+
+      }
+    );
+
+
+    /* =========================================
+       BOTÓN SALTO
+    ========================================= */
+
+    function startJump() {
+
+      keys.up = true;
+
+      jumpBtn.classList.add(
+        'active'
+      );
+
+    }
+
+
+    function stopJump() {
+
+      keys.up = false;
+
+      jumpBtn.classList.remove(
+        'active'
+      );
+
+    }
+
+
+    jumpBtn.addEventListener(
+      'touchstart',
+      e => {
+
+        e.preventDefault();
+
+        startJump();
+
+      },
+      { passive: false }
+    );
+
+
+    jumpBtn.addEventListener(
+      'touchend',
+      e => {
+
+        e.preventDefault();
+
+        stopJump();
+
+      },
+      { passive: false }
+    );
+
+
+    jumpBtn.addEventListener(
+      'touchcancel',
+      e => {
+
+        e.preventDefault();
+
+        stopJump();
+
+      },
+      { passive: false }
+    );
+
+
+    jumpBtn.addEventListener(
+      'mousedown',
+      startJump
+    );
+
+
+    jumpBtn.addEventListener(
+      'mouseup',
+      stopJump
+    );
+
+
+    jumpBtn.addEventListener(
+      'mouseleave',
+      stopJump
+    );
+
+
+    /* =========================================
+       BOTÓN AGACHARSE
+    ========================================= */
+
+    function startDuck() {
+
+      keys.down = true;
+
+      duckBtn.classList.add(
+        'active'
+      );
+
+    }
+
+
+    function stopDuck() {
+
+      keys.down = false;
+
+      duckBtn.classList.remove(
+        'active'
+      );
+
+    }
+
+
+    duckBtn.addEventListener(
+      'touchstart',
+      e => {
+
+        e.preventDefault();
+
+        startDuck();
+
+      },
+      { passive: false }
+    );
+
+
+    duckBtn.addEventListener(
+      'touchend',
+      e => {
+
+        e.preventDefault();
+
+        stopDuck();
+
+      },
+      { passive: false }
+    );
+
+
+    duckBtn.addEventListener(
+      'touchcancel',
+      e => {
+
+        e.preventDefault();
+
+        stopDuck();
+
+      },
+      { passive: false }
+    );
+
+
+    duckBtn.addEventListener(
+      'mousedown',
+      startDuck
+    );
+
+
+    duckBtn.addEventListener(
+      'mouseup',
+      stopDuck
+    );
+
+
+    duckBtn.addEventListener(
+      'mouseleave',
+      stopDuck
+    );
+
+
+    /* =========================================
+       MENÚ DE AUTENTICACIÓN
+    ========================================= */
+
+    document.getElementById(
+      'showLogin'
+    ).onclick = () => {
+
+      authScreen.style.display =
+        'none';
+
+      loginBox.style.display =
+        'block';
+
     };
-    
-    document.getElementById('loginBtn').onclick = async () => {
-      const name = document.getElementById('loginName').value.trim(), pass = document.getElementById('loginPass').value;
-      const error = document.getElementById('loginError'), loading = document.getElementById('loginLoading');
-      loading.textContent = '⏳...';
-      try { const res = await callScript('login',{username:name,password:pass}); loading.textContent=''; if(res.success){username=name;userData={total:res.total,best:res.best,games:res.games};localStorage.setItem('heysenSession',username);localStorage.setItem('heysenSessionData',JSON.stringify(userData));currentUser.textContent='👤 '+username+' · '+userData.total;userBar.style.display='block';hidePanels();startGame();} else error.textContent=res.error; }
-      catch(e) { loading.textContent=''; error.textContent='Error de conexión.'; }
+
+
+    document.getElementById(
+      'showRegister'
+    ).onclick = () => {
+
+      authScreen.style.display =
+        'none';
+
+      registerBox.style.display =
+        'block';
+
     };
-    
-    document.getElementById('localModeBtn').onclick = () => {
+
+
+    document
+      .querySelectorAll('.authBack')
+      .forEach(
+        button => {
+
+          button.onclick = () => {
+
+            hidePanels();
+
+            authScreen.style.display =
+              'block';
+
+          };
+
+        }
+      );
+
+
+    /* =========================================
+       REGISTRO
+    ========================================= */
+
+    document.getElementById(
+      'registerBtn'
+    ).onclick = async () => {
+
+      const name =
+        document.getElementById(
+          'registerName'
+        )
+        .value
+        .trim()
+        .replace(/[<>]/g, '');
+
+
+      const pass =
+        document.getElementById(
+          'registerPass'
+        ).value;
+
+
+      const error =
+        document.getElementById(
+          'registerError'
+        );
+
+
+      const loading =
+        document.getElementById(
+          'registerLoading'
+        );
+
+
+      error.textContent = '';
+
+
+      if (name.length < 3) {
+
+        error.textContent =
+          'Mínimo 3 caracteres.';
+
+        return;
+
+      }
+
+
+      if (pass.length < 4) {
+
+        error.textContent =
+          'Mínimo 4 caracteres.';
+
+        return;
+
+      }
+
+
+      loading.textContent =
+        '⏳ Creando cuenta...';
+
+
+      try {
+
+        const res =
+          await callScript(
+            'register',
+            {
+              username: name,
+              password: pass
+            }
+          );
+
+
+        loading.textContent = '';
+
+
+        if (res.success) {
+
+          loginBox.style.display =
+            'block';
+
+          registerBox.style.display =
+            'none';
+
+          document.getElementById(
+            'loginName'
+          ).value = name;
+
+        } else {
+
+          error.textContent =
+            res.error ||
+            'No se pudo registrar.';
+
+        }
+
+      } catch (e) {
+
+        loading.textContent = '';
+
+        error.textContent =
+          'Error de conexión.';
+
+      }
+
+    };
+
+
+    /* =========================================
+       LOGIN
+    ========================================= */
+
+    document.getElementById(
+      'loginBtn'
+    ).onclick = async () => {
+
+      const name =
+        document.getElementById(
+          'loginName'
+        ).value.trim();
+
+
+      const pass =
+        document.getElementById(
+          'loginPass'
+        ).value;
+
+
+      const error =
+        document.getElementById(
+          'loginError'
+        );
+
+
+      const loading =
+        document.getElementById(
+          'loginLoading'
+        );
+
+
+      error.textContent = '';
+
+      loading.textContent =
+        '⏳ Iniciando sesión...';
+
+
+      try {
+
+        const res =
+          await callScript(
+            'login',
+            {
+              username: name,
+              password: pass
+            }
+          );
+
+
+        loading.textContent = '';
+
+
+        if (res.success) {
+
+          username = name;
+
+          userData = {
+            total: Number(res.total) || 0,
+            best: Number(res.best) || 0,
+            games: Number(res.games) || 0
+          };
+
+
+          localStorage.setItem(
+            'heysenSession',
+            username
+          );
+
+
+          localStorage.setItem(
+            'heysenSessionData',
+            JSON.stringify(userData)
+          );
+
+
+          currentUser.textContent =
+            '👤 ' +
+            username +
+            ' · ' +
+            userData.total;
+
+
+          userBar.style.display =
+            'block';
+
+
+          hidePanels();
+
+          startGame();
+
+        } else {
+
+          error.textContent =
+            res.error ||
+            'Usuario o contraseña incorrectos.';
+
+        }
+
+      } catch (e) {
+
+        loading.textContent = '';
+
+        error.textContent =
+          'Error de conexión.';
+
+      }
+
+    };
+
+
+    /* =========================================
+       MODO LOCAL
+    ========================================= */
+
+    document.getElementById(
+      'localModeBtn'
+    ).onclick = () => {
+
       isLocalMode = true;
+
       username = 'Local';
-      userData = { total: localBestScore, best: localBestScore, games: 0 };
-      currentUser.textContent = '🎮 Local · Mejor: ' + localBestScore;
-      userBar.style.display = 'block';
+
+
+      userData = {
+        total: localBestScore,
+        best: localBestScore,
+        games: 0
+      };
+
+
+      currentUser.textContent =
+        '🎮 Local · Mejor: ' +
+        localBestScore;
+
+
+      userBar.style.display =
+        'block';
+
+
       hidePanels();
+
       startGame();
+
     };
-    
-    function login(n,d){username=n;userData=d;localStorage.setItem('heysenSession',n);localStorage.setItem('heysenSessionData',JSON.stringify(d));currentUser.textContent='👤 '+n+' · '+d.total;userBar.style.display='block';hidePanels();startGame();}
-    
-    function startGame(){
-      obstacles.forEach(o=>o.el.remove());
-      obstacles=[];
-      gameRunning=true; score=0; gameSpeed=6; bgX=0; playerY=0; velocityY=0;
-      jumping=false; ducking=false; chaserOffset=250;
-      scoreAccumulator=0; jobAccumulator=0; spawnAccumulator=0;
-      player.classList.remove('crouching'); player.style.height='100px';
-      player.style.bottom='120px'; background.style.left='0px';
-      updateChaser(); playGameMusic();
-      cancelAnimationFrame(animationFrame);
-      lastFrame=performance.now();
-      animationFrame=requestAnimationFrame(gameLoop);
-    }
 
-    function gameLoop(now){
-      if(!gameRunning) return;
-      const dt=Math.min((now-lastFrame)/1000,0.05);
-      lastFrame=now;
-      updateGame(dt);
-      animationFrame=requestAnimationFrame(gameLoop);
-    }
-    
-    function updateGame(dt){
-      if(!gameRunning)return;
-      const frameScale=dt*50;
-      const sp=(ducking?gameSpeed*.45:gameSpeed)*frameScale;
-      bgX-=sp;
-      if(bgX<=-viewportWidth) bgX=0;
-      background.style.left=bgX+'px';
 
-      if(keys.up&&!jumping){jumping=true;velocityY=15;play(jumpSound,.88+Math.random()*.25,.8);}
-      if(keys.down&&!jumping){
-        ducking=true; player.classList.add('crouching'); player.style.height='60px';
-        chaserOffset=Math.max(135,chaserOffset-1.5*frameScale);
-      }else{
-        ducking=false; player.classList.remove('crouching'); player.style.height='100px';
-        chaserOffset=Math.min(250,chaserOffset+.35*frameScale);
-      }
+    /* =========================================
+       INICIAR PARTIDA
+    ========================================= */
 
-      if(jumping){
-        playerY+=velocityY*frameScale;
-        velocityY-=.8*frameScale;
-        if(playerY<=0){playerY=0;velocityY=0;jumping=false;}
-      }
-      player.style.bottom=(120+playerY)+'px';
+    function startGame() {
+
+      obstacles.forEach(
+        o => o.el.remove()
+      );
+
+      obstacles = [];
+
+
+      gameRunning = true;
+
+      score = 0;
+
+      gameSpeed = 6;
+
+      bgX = 0;
+
+      playerY = 0;
+
+      velocityY = 0;
+
+      jumping = false;
+
+      ducking = false;
+
+      chaserOffset = 250;
+
+
+      scoreAccumulator = 0;
+
+      jobAccumulator = 0;
+
+      spawnAccumulator = 0;
+
+
+      player.classList.remove(
+        'crouching'
+      );
+
+      player.style.height =
+        '100px';
+
+      player.style.bottom =
+        '120px';
+
+
+      background.style.left =
+        '0px';
+
+
+      scoreDisplay.textContent =
+        'Puntos: 0';
+
+
       updateChaser();
 
-      spawnAccumulator+=dt*1000;
-      const spawnDelay=Math.max(850,1450-(gameSpeed-6)*45);
-      if(spawnAccumulator>=spawnDelay){spawnAccumulator=0;createObstacle();}
 
-      scoreAccumulator+=dt*1000;
-      if(scoreAccumulator>=100){
-        const points=Math.floor(scoreAccumulator/100);
-        scoreAccumulator-=points*100;
-        score+=points;
-        scoreDisplay.textContent='Puntos: '+score;
-        if(Math.floor(score/50)>Math.floor((score-points)/50)) gameSpeed+=.3;
-      }
+      playGameMusic();
 
-      jobAccumulator+=dt*1000;
-      if(jobAccumulator>=3800){
-        jobAccumulator=0;
-        if(Math.random()<.32)play(jobSound,.55+Math.random()*.2,.65);
-      }
 
-      for(let i=obstacles.length-1;i>=0;i--){
-        const o=obstacles[i], el=o.el;
-        const x=o.x-gameSpeed*frameScale;
-        o.x=x;
-        el.style.transform=`translate3d(${x}px,0,0)`;
-        if(!(o.isBlue&&ducking)&&collidesThin(player,el)) return endGame(true);
-        if(x<-220){el.remove();obstacles.splice(i,1);}
-      }
+      cancelAnimationFrame(
+        animationFrame
+      );
 
-      if(chaserOffset<=135) endGame(true);
+
+      lastFrame =
+        performance.now();
+
+
+      animationFrame =
+        requestAnimationFrame(
+          gameLoop
+        );
+
     }
-    
-    function updateChaser(){chaser.style.marginLeft='-'+chaserOffset+'px';}
-    
-    function createObstacle(){
-      if(!gameRunning)return;
-      const el=document.createElement('div');
-      el.className='obstacle';
-      el.style.left='0px';
-      const r=Math.random(); let b=false;
-      if(r<.30){el.style.width='120px';el.style.height='70px';}
-      else if(r<.55){el.style.width='140px';el.style.height='90px';}
-      else if(r<.78){b=true;el.classList.add('blue');el.style.width='115px';el.style.height='155px';}
-      else{el.style.width='90px';el.style.height='120px';}
-      el.style.bottom='120px';
-      document.getElementById('gameContainer').appendChild(el);
-      const o={el,isBlue:b,x:viewportWidth+20};
-      el.style.transform=`translate3d(${o.x}px,0,0)`;
-      obstacles.push(o);
+
+
+    /* =========================================
+       GAME LOOP
+    ========================================= */
+
+    function gameLoop(now) {
+
+      if (!gameRunning) {
+        return;
+      }
+
+
+      const dt =
+        Math.min(
+          (now - lastFrame) / 1000,
+          0.05
+        );
+
+
+      lastFrame = now;
+
+
+      updateGame(dt);
+
+
+      animationFrame =
+        requestAnimationFrame(
+          gameLoop
+        );
+
     }
-    
-    function collidesThin(a,b){const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect(),inset=br.width*.32;return!(ar.right-10<br.left+inset||ar.left+10>br.right-inset||ar.bottom-8<br.top+10||ar.top+8>br.bottom-10);}
-    
-    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;cancelAnimationFrame(animationFrame);obstacles.forEach(o=>o.el.remove());obstacles=[];stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d = deathSounds[Math.floor(Math.random() * deathSounds.length)]; d.playbackRate = .65 + Math.random() * 1; d.volume = .9; d.currentTime = 0; d.play().catch(() => {}); gameOverScreen.style.display='block';playMenuMusic();}}
-    
-    async function openBoard(){leaderboardList.innerHTML='<li>Cargando...</li>';leaderboard.style.display='block';try{const res=await callScript('leaderboard');leaderboardList.innerHTML='';if(!res.users||!res.users.length){const li=document.createElement('li');li.className='empty';li.textContent='Sin jugadores.';leaderboardList.appendChild(li);}else{res.users.slice(0,20).forEach(u=>{const li=document.createElement('li');li.textContent=u.username+' — '+u.total+' pts';leaderboardList.appendChild(li);});}}catch(e){leaderboardList.innerHTML='<li>Error: '+e.message+'</li>';}}
-    
-    document.getElementById('logoutBtn').onclick=()=>{endGame(false);username='';userData=null;isLocalMode=false;localStorage.removeItem('heysenSession');userBar.style.display='none';hidePanels();authScreen.style.display='block';playMenuMusic();};
-    document.getElementById('restartBtn').onclick=()=>{gameOverScreen.style.display='none';startGame();};
-    document.getElementById('leaderboardBtn').onclick=openBoard;
-    document.querySelector('.openBoard').onclick=openBoard;
-    document.getElementById('closeBoard').onclick=()=>leaderboard.style.display='none';
-    
 
-    window.addEventListener('resize',()=>{viewportWidth=window.innerWidth;});
 
-    // Precarga explícita: evita que monster.png aparezca tarde durante la partida.
-    const monsterPreload = new Image();
-    monsterPreload.onload = () => chaser.classList.add('loaded');
-    monsterPreload.onerror = () => {
-      console.warn('No se pudo cargar ./assets/images/monster.png. Verifica que el archivo exista en assets/images/.');
-      chaser.style.display='none';
+    /* =========================================
+       ACTUALIZAR JUEGO
+    ========================================= */
+
+    function updateGame(dt) {
+
+      if (!gameRunning) {
+        return;
+      }
+
+
+      const frameScale =
+        dt * 50;
+
+
+      const speed =
+        ducking
+          ? gameSpeed * .45
+          : gameSpeed;
+
+
+      const movement =
+        speed * frameScale;
+
+
+      /* FONDO */
+
+      bgX -= movement;
+
+
+      if (
+        bgX <= -viewportWidth
+      ) {
+
+        bgX = 0;
+
+      }
+
+
+      background.style.left =
+        bgX + 'px';
+
+
+      /* SALTO */
+
+      if (
+        keys.up &&
+        !jumping
+      ) {
+
+        jumping = true;
+
+        velocityY = 15;
+
+        play(
+          jumpSound,
+          .88 + Math.random() * .25,
+          .8
+        );
+
+      }
+
+
+      /* AGACHARSE */
+
+      if (
+        keys.down &&
+        !jumping
+      ) {
+
+        ducking = true;
+
+        player.classList.add(
+          'crouching'
+        );
+
+        player.style.height =
+          '60px';
+
+
+        chaserOffset =
+          Math.max(
+            135,
+            chaserOffset -
+            1.5 * frameScale
+          );
+
+      } else {
+
+        ducking = false;
+
+        player.classList.remove(
+          'crouching'
+        );
+
+        player.style.height =
+          '100px';
+
+
+        chaserOffset =
+          Math.min(
+            250,
+            chaserOffset +
+            .35 * frameScale
+          );
+
+      }
+
+
+      /* FÍSICA DEL SALTO */
+
+      if (jumping) {
+
+        playerY +=
+          velocityY *
+          frameScale;
+
+
+        velocityY -=
+          .8 *
+          frameScale;
+
+
+        if (
+          playerY <= 0
+        ) {
+
+          playerY = 0;
+
+          velocityY = 0;
+
+          jumping = false;
+
+        }
+
+      }
+
+
+      player.style.bottom =
+        (120 + playerY) +
+        'px';
+
+
+      updateChaser();
+
+
+      /* SPAWN */
+
+      spawnAccumulator +=
+        dt * 1000;
+
+
+      const spawnDelay =
+        Math.max(
+          850,
+          1450 -
+          (gameSpeed - 6) * 45
+        );
+
+
+      if (
+        spawnAccumulator >=
+        spawnDelay
+      ) {
+
+        spawnAccumulator = 0;
+
+        createObstacle();
+
+      }
+
+
+      /* PUNTOS */
+
+      scoreAccumulator +=
+        dt * 1000;
+
+
+      if (
+        scoreAccumulator >= 100
+      ) {
+
+        const points =
+          Math.floor(
+            scoreAccumulator / 100
+          );
+
+
+        scoreAccumulator -=
+          points * 100;
+
+
+        score += points;
+
+
+        scoreDisplay.textContent =
+          'Puntos: ' +
+          score;
+
+
+        if (
+          Math.floor(score / 50) >
+          Math.floor(
+            (score - points) / 50
+          )
+        ) {
+
+          gameSpeed += .3;
+
+        }
+
+      }
+
+
+      /* SONIDO JOB */
+
+      jobAccumulator +=
+        dt * 1000;
+
+
+      if (
+        jobAccumulator >= 3800
+      ) {
+
+        jobAccumulator = 0;
+
+
+        if (
+          Math.random() < .32
+        ) {
+
+          play(
+            jobSound,
+            .55 + Math.random() * .2,
+            .65
+          );
+
+        }
+
+      }
+
+
+      /* OBSTÁCULOS */
+
+      for (
+        let i = obstacles.length - 1;
+        i >= 0;
+        i--
+      ) {
+
+        const o =
+          obstacles[i];
+
+        const el =
+          o.el;
+
+
+        const x =
+          o.x -
+          gameSpeed *
+          frameScale;
+
+
+        o.x = x;
+
+
+        el.style.transform =
+          `translate3d(${x}px,0,0)`;
+
+
+        if (
+          !(
+            o.isBlue &&
+            ducking
+          ) &&
+          collidesThin(
+            player,
+            el
+          )
+        ) {
+
+          endGame(true);
+
+          return;
+
+        }
+
+
+        if (
+          x < -220
+        ) {
+
+          el.remove();
+
+          obstacles.splice(
+            i,
+            1
+          );
+
+        }
+
+      }
+
+
+      if (
+        chaserOffset <= 135
+      ) {
+
+        endGame(true);
+
+      }
+
+    }
+
+
+    /* =========================================
+       MONSTRUO
+    ========================================= */
+
+    function updateChaser() {
+
+      chaser.style.marginLeft =
+        '-' +
+        chaserOffset +
+        'px';
+
+    }
+
+
+    /* =========================================
+       CREAR OBSTÁCULO
+    ========================================= */
+
+    function createObstacle() {
+
+      if (!gameRunning) {
+        return;
+      }
+
+
+      const el =
+        document.createElement(
+          'div'
+        );
+
+
+      el.className =
+        'obstacle';
+
+
+      el.style.left =
+        '0px';
+
+
+      const r =
+        Math.random();
+
+
+      let isBlue = false;
+
+
+      if (r < .30) {
+
+        el.style.width =
+          '120px';
+
+        el.style.height =
+          '70px';
+
+      } else if (r < .55) {
+
+        el.style.width =
+          '140px';
+
+        el.style.height =
+          '90px';
+
+      } else if (r < .78) {
+
+        isBlue = true;
+
+        el.classList.add(
+          'blue'
+        );
+
+        el.style.width =
+          '115px';
+
+        el.style.height =
+          '155px';
+
+      } else {
+
+        el.style.width =
+          '90px';
+
+        el.style.height =
+          '120px';
+
+      }
+
+
+      el.style.bottom =
+        '120px';
+
+
+      document
+        .getElementById(
+          'gameContainer'
+        )
+        .appendChild(el);
+
+
+      const obstacle = {
+
+        el: el,
+
+        isBlue: isBlue,
+
+        x: viewportWidth + 20
+
+      };
+
+
+      el.style.transform =
+        `translate3d(${obstacle.x}px,0,0)`;
+
+
+      obstacles.push(
+        obstacle
+      );
+
+    }
+
+
+    /* =========================================
+       COLISIÓN
+    ========================================= */
+
+    function collidesThin(a, b) {
+
+      const ar =
+        a.getBoundingClientRect();
+
+      const br =
+        b.getBoundingClientRect();
+
+
+      const inset =
+        br.width * .32;
+
+
+      return !(
+        ar.right - 10 <
+          br.left + inset ||
+
+        ar.left + 10 >
+          br.right - inset ||
+
+        ar.bottom - 8 <
+          br.top + 10 ||
+
+        ar.top + 8 >
+          br.bottom - 10
+      );
+
+    }
+
+
+    /* =========================================
+       GAME OVER
+       IMPORTANTE:
+       NO ESPERA A GOOGLE SHEETS
+    ========================================= */
+
+    function endGame(
+      save = true
+    ) {
+
+      if (!gameRunning) {
+        return;
+      }
+
+
+      gameRunning = false;
+
+
+      cancelAnimationFrame(
+        animationFrame
+      );
+
+
+      obstacles.forEach(
+        o => o.el.remove()
+      );
+
+      obstacles = [];
+
+
+      stop(gameMusic);
+
+
+      /* Mostrar Game Over inmediatamente */
+
+      finalScore.textContent =
+        score;
+
+
+      const death =
+        deathSounds[
+          Math.floor(
+            Math.random() *
+            deathSounds.length
+          )
+        ];
+
+
+      death.playbackRate =
+        .65 +
+        Math.random();
+
+
+      death.volume = .9;
+
+      death.currentTime = 0;
+
+      death.play().catch(
+        () => {}
+      );
+
+
+      gameOverScreen.style.display =
+        'block';
+
+
+      playMenuMusic();
+
+
+      /* =================================
+         SIN USUARIO
+      ================================= */
+
+      if (
+        !save ||
+        !username ||
+        !userData
+      ) {
+
+        totalScore.textContent =
+          userData
+            ? userData.total
+            : 0;
+
+        return;
+
+      }
+
+
+      /* =================================
+         MODO LOCAL
+      ================================= */
+
+      if (isLocalMode) {
+
+        if (
+          score >
+          localBestScore
+        ) {
+
+          localBestScore =
+            score;
+
+
+          localStorage.setItem(
+            'heysenLocalBest',
+            String(
+              localBestScore
+            )
+          );
+
+
+          userData.best =
+            localBestScore;
+
+          userData.total =
+            localBestScore;
+
+        }
+
+
+        totalScore.textContent =
+          userData.total;
+
+
+        currentUser.textContent =
+          '🎮 Local · Mejor: ' +
+          userData.total;
+
+
+        return;
+
+      }
+
+
+      /* =================================
+         ACTUALIZACIÓN LOCAL INMEDIATA
+      ================================= */
+
+      const oldTotal =
+        Number(userData.total) || 0;
+
+
+      userData.total =
+        oldTotal + score;
+
+
+      userData.best =
+        Math.max(
+          Number(userData.best) || 0,
+          score
+        );
+
+
+      userData.games =
+        (Number(userData.games) || 0) + 1;
+
+
+      totalScore.textContent =
+        userData.total;
+
+
+      currentUser.textContent =
+        '👤 ' +
+        username +
+        ' · ' +
+        userData.total;
+
+
+      /* =================================
+         GUARDAR EN SEGUNDO PLANO
+      ================================= */
+
+      callScript(
+        'updateScore',
+        {
+          username: username,
+          score: score
+        }
+      )
+      .then(res => {
+
+        if (
+          res &&
+          res.success
+        ) {
+
+          if (
+            res.total !== undefined
+          ) {
+
+            userData.total =
+              Number(res.total);
+
+          }
+
+
+          if (
+            res.best !== undefined
+          ) {
+
+            userData.best =
+              Number(res.best);
+
+          }
+
+
+          if (
+            res.games !== undefined
+          ) {
+
+            userData.games =
+              Number(res.games);
+
+          }
+
+
+          localStorage.setItem(
+            'heysenSessionData',
+            JSON.stringify(
+              userData
+            )
+          );
+
+
+          totalScore.textContent =
+            userData.total;
+
+
+          currentUser.textContent =
+            '👤 ' +
+            username +
+            ' · ' +
+            userData.total;
+
+        } else {
+
+          userData.total =
+            oldTotal;
+
+
+          totalScore.textContent =
+            oldTotal;
+
+
+          currentUser.textContent =
+            '👤 ' +
+            username +
+            ' · ' +
+            oldTotal;
+
+        }
+
+      })
+      .catch(() => {
+
+        /*
+          Si Google falla, el juego
+          NO se queda bloqueado.
+        */
+
+        userData.total =
+          oldTotal;
+
+
+        totalScore.textContent =
+          oldTotal;
+
+
+        currentUser.textContent =
+          '👤 ' +
+          username +
+          ' · ' +
+          oldTotal;
+
+      });
+
+    }
+
+
+    /* =========================================
+       CLASIFICACIÓN
+       EL PANEL APARECE INMEDIATAMENTE
+    ========================================= */
+
+    async function openBoard() {
+
+      leaderboard.style.display =
+        'block';
+
+
+      leaderboardList.innerHTML =
+        '<li>Cargando clasificación...</li>';
+
+
+      try {
+
+        const res =
+          await callScript(
+            'leaderboard'
+          );
+
+
+        leaderboardList.innerHTML =
+          '';
+
+
+        if (
+          !res ||
+          !res.users ||
+          !Array.isArray(res.users) ||
+          res.users.length === 0
+        ) {
+
+          const li =
+            document.createElement(
+              'li'
+            );
+
+
+          li.className =
+            'empty';
+
+
+          li.textContent =
+            'Sin jugadores.';
+
+
+          leaderboardList.appendChild(
+            li
+          );
+
+
+          return;
+
+        }
+
+
+        res.users
+          .slice(0, 20)
+          .forEach(
+            (u, index) => {
+
+              const li =
+                document.createElement(
+                  'li'
+                );
+
+
+              li.textContent =
+                `${index + 1}. ` +
+                `${u.username} — ` +
+                `${u.total} pts`;
+
+
+              leaderboardList.appendChild(
+                li
+              );
+
+            }
+          );
+
+      } catch (error) {
+
+        leaderboardList.innerHTML =
+          '';
+
+
+        const li =
+          document.createElement(
+            'li'
+          );
+
+
+        li.className =
+          'empty';
+
+
+        li.textContent =
+          '⚠️ No se pudo cargar la clasificación.';
+
+
+        leaderboardList.appendChild(
+          li
+        );
+
+
+        console.error(
+          'Error cargando clasificación:',
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================
+       BOTONES
+    ========================================= */
+
+    document.getElementById(
+      'logoutBtn'
+    ).onclick = () => {
+
+      endGame(false);
+
+      username = '';
+
+      userData = null;
+
+      isLocalMode = false;
+
+
+      localStorage.removeItem(
+        'heysenSession'
+      );
+
+
+      userBar.style.display =
+        'none';
+
+
+      hidePanels();
+
+
+      authScreen.style.display =
+        'block';
+
+
+      playMenuMusic();
+
     };
-    monsterPreload.src = './assets/images/monster.png';
 
-    if(username){const sd=localStorage.getItem('heysenSessionData');if(sd)userData=JSON.parse(sd);currentUser.textContent='👤 '+username+' · '+(userData?userData.total:0);userBar.style.display='block';}playMenuMusic();
+
+    document.getElementById(
+      'restartBtn'
+    ).onclick = () => {
+
+      gameOverScreen.style.display =
+        'none';
+
+      startGame();
+
+    };
+
+
+    document.getElementById(
+      'leaderboardBtn'
+    ).onclick =
+      openBoard;
+
+
+    document
+      .querySelector('.openBoard')
+      .onclick =
+      openBoard;
+
+
+    document.getElementById(
+      'closeBoard'
+    ).onclick = () => {
+
+      leaderboard.style.display =
+        'none';
+
+    };
+
+
+    /* =========================================
+       RESIZE
+    ========================================= */
+
+    window.addEventListener(
+      'resize',
+      () => {
+
+        viewportWidth =
+          window.innerWidth;
+
+      }
+    );
+
+
+    /* =========================================
+       PRELOAD DEL MONSTRUO
+    ========================================= */
+
+    const monsterPreload =
+      new Image();
+
+
+    monsterPreload.onload = () => {
+
+      chaser.classList.add(
+        'loaded'
+      );
+
+    };
+
+
+    monsterPreload.onerror = () => {
+
+      console.warn(
+        'No se pudo cargar monster.png'
+      );
+
+    };
+
+
+    monsterPreload.src =
+      './assets/images/monster.png';
+
+
+    /* =========================================
+       SESIÓN GUARDADA
+    ========================================= */
+
+    if (username) {
+
+      const savedData =
+        localStorage.getItem(
+          'heysenSessionData'
+        );
+
+
+      if (savedData) {
+
+        try {
+
+          userData =
+            JSON.parse(
+              savedData
+            );
+
+        } catch {
+
+          userData = null;
+
+        }
+
+      }
+
+
+      currentUser.textContent =
+        '👤 ' +
+        username +
+        ' · ' +
+        (
+          userData
+            ? userData.total
+            : 0
+        );
+
+
+      userBar.style.display =
+        'block';
+
+    }
+
+
+    /* =========================================
+       MÚSICA DEL MENÚ
+    ========================================= */
+
+    playMenuMusic();
+
   </script>
+
 </body>
 </html>
