@@ -1,257 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Heysen Escape - Job</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Heysen Escape · Windows 7 Edition</title>
   <link rel="preload" as="image" href="./assets/images/monster.png">
   <link rel="preload" as="image" href="./assets/images/HeysenIdle.png">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a15; font-family: Arial, sans-serif; touch-action: none; }
-    #gameContainer { position: relative; width: 100%; height: 100%; }
-    #background { position: absolute; inset: 0; width: 200%; background: url("assets/images/skybg.png") center / cover repeat-x; z-index: 1; will-change: left; }
-    #player { position: absolute; width: 80px; height: 100px; left: 50%; transform: translateX(-50%); bottom: 120px; background: url("assets/images/HeysenIdle.png") center / contain no-repeat; z-index: 10; will-change: bottom; }
-    #player.crouching { background-image: url("assets/images/HeysenCrouch.png"); height: 60px; }
-    #floor { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; background: linear-gradient(#3a3a5a,#1a1a3a); border-top: 4px solid #ffd700; z-index: 1; }
-    .obstacle { position: absolute; background: url("assets/images/jobjobsahur.gif") center / 100% 100% no-repeat; z-index: 5; will-change: transform; }
-    .obstacle.blue { filter: hue-rotate(180deg) saturate(2); }
-    #chaser { position: absolute; width: 200px; height: 200px; left: 50%; bottom: 120px; margin-left: -250px; transform: translateX(-50%); background: url("./assets/images/monster.png") center / contain no-repeat; z-index: 8; will-change: margin-left; }
-    #score { position: fixed; top: 20px; left: 20px; color: white; font-size: 28px; font-weight: bold; text-shadow: 3px 3px 6px #000; z-index: 100; }
-    #userBar { position: fixed; top: 18px; right: 20px; z-index: 100; color: white; font-weight: bold; }
-    #leaderboardBtn, #logoutBtn { margin-left: 8px; padding: 9px 13px; border: 0; border-radius: 10px; font-weight: bold; cursor: pointer; background: #ffd700; color: #1a1a2e; }
-    #logoutBtn { background: #f35b5b; color: white; }
-    .panel { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); width: min(450px, 92vw); max-height: 90vh; overflow-y: auto; padding: 30px; text-align: center; color: white; background: linear-gradient(145deg,#1a1a2e,#0f0f1a); border: 4px solid #ffd700; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,.7); z-index: 200; }
-    .panel h1 { color: #ffd700; margin-bottom: 14px; }
-    .panel p { color: #ddd; margin: 10px 0; }
-    .panel input { width: 100%; padding: 13px; margin: 7px 0; border: 0; border-radius: 10px; font-size: 17px; }
-    .panel button { padding: 13px 22px; border: 0; border-radius: 50px; font-weight: bold; font-size: 17px; cursor: pointer; color: #1a1a2e; background: linear-gradient(135deg,#ffd700,#ffaa00); margin: 6px 3px; }
-    #gameOver, #leaderboard, #registerBox, #loginBox { display: none; }
-    #gameOver h1 { color: #ff6b6b; }
-    .instructions { margin-top: 15px; padding: 12px; background: rgba(255,255,255,.1); border-radius: 10px; font-size: 14px; line-height: 1.55; }
-    #leaderboard ol { text-align: left; max-height: 260px; overflow-y: auto; margin: 16px 0 20px; padding-left: 30px; }
-    #leaderboard li { padding: 7px; border-bottom: 1px solid rgba(255,255,255,.15); }
-    #leaderboard .empty { list-style: none; margin-left: -30px; text-align: center; color: #ccc; }
-    .secondary { background: #444 !important; color: white !important; }
-    .warning { color: #ff9c9c !important; min-height: 20px; font-size: 14px; }
-    .loading { color: #ffd700; font-weight: bold; margin-top: 10px; min-height: 20px; }
-    #touchControls { position: fixed; bottom: 20px; left: 0; width: 100%; height: 120px; z-index: 150; display: none; pointer-events: none; }
-    .touchBtn { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,215,0,.35); border: 3px solid #ffd700; color: white; font-size: 40px; font-weight: bold; display: flex; align-items: center; justify-content: center; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; transition: background .08s ease; }
-    .touchBtn:active, .touchBtn.active { background: rgba(255,215,0,.7); }
-    #jumpBtn { left: 30px; bottom: 10px; }
-    #duckBtn { right: 30px; bottom: 10px; }
-    #controlsHint { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,.6); font-size: 13px; text-align: center; z-index: 140; pointer-events: none; }
-    @media (max-width: 768px) {
-      #touchControls { display: block; }
-      #controlsHint { display: none; }
-      #score { font-size: 22px; top: 15px; left: 15px; }
-      #userBar { top: 12px; right: 15px; }
-      #leaderboardBtn, #logoutBtn { padding: 7px 10px; font-size: 14px; }
-      .panel { padding: 22px; }
-      .touchBtn { width: 85px; height: 85px; font-size: 34px; }
-    }
+    :root { --blue1:#effaff; --blue2:#65b6eb; --blue3:#176da6; --blue4:#073e70; --ink:#142c3f; --gold:#ffe77a; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html,body { width:100%; height:100%; overflow:hidden; background:#07182c; color:#fff; font-family:"Segoe UI",Tahoma,Arial,sans-serif; touch-action:none; }
+    #gameContainer { position:relative; width:100%; height:100%; isolation:isolate; }
+    #background { position:absolute; inset:0; width:200%; background:url("assets/images/skybg.png") center/cover repeat-x; z-index:1; will-change:left; filter:saturate(.9) contrast(1.04); }
+    #background::after { content:""; position:fixed; inset:0; background:linear-gradient(180deg,rgba(15,70,135,.18),transparent 32%,rgba(1,8,22,.25)); pointer-events:none; }
+    #floor { position:fixed; z-index:2; left:0; bottom:0; width:100%; height:120px; background:linear-gradient(#667688 0 4%,#263746 5% 50%,#101d29 51%); border-top:3px solid #d6efff; box-shadow:0 -2px 0 #416a88, inset 0 10px 20px rgba(255,255,255,.1); }
+    #player { position:absolute; z-index:10; width:80px; height:100px; left:50%; bottom:120px; transform:translateX(-50%); background:url("assets/images/HeysenIdle.png") center/contain no-repeat; will-change:bottom; filter:drop-shadow(3px 5px 3px rgba(0,0,0,.45)); }
+    #player.crouching { height:60px; background-image:url("assets/images/HeysenCrouch.png"); }
+    #chaser { position:absolute; z-index:8; width:200px; height:200px; left:50%; bottom:120px; margin-left:-250px; transform:translateX(-50%); background:url("./assets/images/monster.png") center/contain no-repeat; will-change:margin-left; filter:drop-shadow(4px 7px 4px rgba(0,0,0,.5)); }
+    .obstacle { position:absolute; z-index:5; background:url("assets/images/jobjobsahur.gif") center/100% 100% no-repeat; will-change:transform; filter:drop-shadow(3px 4px 2px rgba(0,0,0,.4)); }
+    .obstacle.blue { filter:hue-rotate(180deg) saturate(2) drop-shadow(3px 4px 2px rgba(0,0,0,.4)); }
+
+    .glass { border:1px solid rgba(255,255,255,.8); border-radius:7px; background:linear-gradient(180deg,rgba(238,250,255,.96),rgba(132,197,235,.94) 46%,rgba(57,137,191,.95) 47%,rgba(16,83,144,.96)); box-shadow:0 0 0 1px rgba(8,51,91,.8),0 7px 22px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.95); }
+    #score { position:fixed; z-index:100; top:15px; left:17px; min-width:154px; padding:8px 13px 9px; color:#fff; font-size:19px; font-weight:700; letter-spacing:.15px; text-shadow:0 1px 2px #06365e; }
+    #score::before { content:"★"; margin-right:7px; color:var(--gold); text-shadow:0 1px 1px #6c5400; }
+    #userBar { position:fixed; z-index:100; top:15px; right:17px; display:flex; align-items:center; gap:7px; padding:5px 6px 5px 12px; color:#fff; font-size:14px; font-weight:600; text-shadow:0 1px 2px #06365e; }
+    button { font:600 14px "Segoe UI",Tahoma,Arial,sans-serif; cursor:pointer; }
+    .winBtn { min-height:31px; padding:5px 13px; color:#17364a; text-shadow:0 1px rgba(255,255,255,.75); border:1px solid #27688e; border-radius:4px; background:linear-gradient(#fbfeff 0,#c5e8fb 46%,#8ec7e7 47%,#67a8d2); box-shadow:inset 0 1px #fff,0 1px 1px rgba(0,0,0,.35); }
+    .winBtn:hover { border-color:#f7b900; background:linear-gradient(#fff8d9,#ffe992 46%,#ffc23c 47%,#f0a514); }
+    .winBtn:active { transform:translateY(1px); box-shadow:inset 0 2px 4px rgba(92,63,0,.42); }
+    .danger { color:#fff; text-shadow:0 1px #7b1010; border-color:#8c1a1a; background:linear-gradient(#ffaaaa,#e75252 48%,#bb1f25 49%,#8f1016); }
+    .secondary { color:#fff!important; text-shadow:0 1px #18384e!important; border-color:#27688e!important; background:linear-gradient(#9fd4ed,#5ca6d1 48%,#357eab 49%,#1e5b86)!important; }
+
+    .panel { position:fixed; z-index:200; top:50%; left:50%; width:min(470px,92vw); max-height:calc(100vh - 105px); overflow:auto; transform:translate(-50%,-50%); padding:0 22px 23px; color:var(--ink); text-align:center; border:1px solid rgba(255,255,255,.88); border-radius:8px; background:linear-gradient(135deg,rgba(224,247,255,.98),rgba(168,214,239,.98) 42%,rgba(104,175,214,.98)); box-shadow:0 0 0 1px #075789,0 15px 42px rgba(0,0,0,.62),inset 0 1px #fff; }
+    .panel::before { content:""; display:block; height:6px; margin:0 -22px 16px; border-radius:8px 8px 0 0; background:linear-gradient(90deg,#0d548c,#53b8f1 45%,#dff8ff 58%,#3998d1); box-shadow:inset 0 1px rgba(255,255,255,.9); }
+    .panel h1 { margin:0 0 12px; color:#073e70; font-size:26px; text-shadow:0 1px #fff; }
+    .panel p { margin:9px 0; line-height:1.4; }
+    .panel input { width:100%; margin:6px 0; padding:10px 11px; color:#18364b; font:16px "Segoe UI",sans-serif; border:1px solid #6a9db9; border-radius:3px; outline:none; box-shadow:inset 0 1px 3px rgba(0,0,0,.16); }
+    .panel input:focus { border-color:#ffae00; box-shadow:0 0 0 2px rgba(255,205,71,.55),inset 0 1px 3px rgba(0,0,0,.16); }
+    .panel .winBtn { margin:10px 3px 0; min-width:125px; }
+    #gameOver,#leaderboard,#registerBox,#loginBox { display:none; }
+    #gameOver h1 { color:#a21e24; }
+    .instructions { margin-top:16px!important; padding:10px; color:#21465c; border:1px solid #86b8d2; border-radius:4px; background:rgba(255,255,255,.42); font-size:13px; }
+    .warning { min-height:19px; color:#ad1d22!important; font-size:13px; font-weight:600; }
+    .loading { min-height:19px; color:#075789; font-size:13px; font-weight:700; }
+    #leaderboard ol { max-height:260px; margin:15px 0 4px; padding-left:27px; text-align:left; border:1px solid #7aafcb; border-radius:4px; background:rgba(255,255,255,.45); overflow:auto; }
+    #leaderboard li { padding:7px 9px; border-bottom:1px solid rgba(69,130,166,.25); }
+    #leaderboard .empty { margin-left:-27px; list-style:none; text-align:center; }
+    #taskbar { position:fixed; z-index:170; bottom:0; left:0; width:100%; height:42px; display:flex; align-items:center; padding:0 9px; border-top:1px solid rgba(214,247,255,.92); background:linear-gradient(rgba(111,189,232,.86),rgba(38,113,169,.94) 48%,rgba(8,60,113,.96)); box-shadow:0 -2px 9px rgba(0,0,0,.35),inset 0 1px rgba(255,255,255,.72); }
+    #startOrb { width:48px; height:48px; margin:-11px 12px 0 0; border:2px solid #dffbff; border-radius:50%; color:#fff; font:bold 12px "Segoe UI"; text-shadow:0 1px #075; background:radial-gradient(circle at 35% 27%,#d3ffb9 0 7%,#61c638 22%,#16852b 55%,#075618 100%); box-shadow:0 0 0 1px #07581d,0 2px 8px #001c12,inset 0 2px 3px rgba(255,255,255,.7); }
+    #startOrb:hover { filter:brightness(1.14); }
+    .taskTitle { height:30px; padding:6px 16px; color:#eaf8ff; border:1px solid rgba(176,232,255,.5); border-radius:3px; background:linear-gradient(rgba(207,244,255,.33),rgba(8,67,126,.35)); box-shadow:inset 0 1px rgba(255,255,255,.22); font-size:13px; text-shadow:0 1px #073861; }
+    #soundBtn { margin-left:auto; width:34px; height:29px; color:#fff; border:1px solid transparent; border-radius:3px; background:transparent; font-size:17px; }
+    #soundBtn:hover { border-color:#bfeeff; background:rgba(255,255,255,.18); }
+    #touchControls { position:fixed; z-index:150; bottom:47px; left:0; width:100%; height:115px; display:none; pointer-events:none; }
+    .touchBtn { position:absolute; bottom:9px; width:82px; height:82px; display:flex; align-items:center; justify-content:center; color:#fff; border:2px solid #dff6ff; border-radius:50%; background:radial-gradient(circle at 35% 25%,rgba(172,233,255,.9),rgba(42,135,194,.78) 58%,rgba(9,65,124,.85)); box-shadow:0 2px 6px rgba(0,0,0,.45),inset 0 2px rgba(255,255,255,.55); font-size:31px; text-shadow:0 2px #073a68; pointer-events:auto; user-select:none; }
+    .touchBtn.active,.touchBtn:active { filter:brightness(.76); transform:translateY(1px); }
+    #jumpBtn { left:23px; } #duckBtn { right:23px; }
+    #controlsHint { position:fixed; z-index:140; bottom:51px; left:50%; transform:translateX(-50%); padding:4px 12px; color:#e8f8ff; border-radius:3px; background:rgba(2,27,54,.5); font-size:12px; text-align:center; pointer-events:none; text-shadow:0 1px 2px #000; }
+    @media(max-width:768px) { #touchControls{display:block} #controlsHint{display:none} #score{top:10px;left:10px;font-size:16px;min-width:auto} #userBar{top:10px;right:10px;padding:4px} #currentUser{display:none} #userBar .winBtn{padding:4px 8px;min-height:29px;font-size:12px} .panel{padding:0 17px 18px} .panel::before{margin-left:-17px;margin-right:-17px} }
   </style>
 </head>
 <body>
   <div id="gameContainer">
-    <div id="background"></div>
-    <div id="score">Puntos: 0</div>
-    <div id="userBar" style="display:none"><span id="currentUser"></span><button id="leaderboardBtn">🏆 Tabla</button><button id="logoutBtn">Salir</button></div>
+    <div id="background"></div><div id="score" class="glass">Puntos: 0</div>
+    <div id="userBar" class="glass" style="display:none"><span id="currentUser"></span><button id="leaderboardBtn" class="winBtn">🏆 Tabla</button><button id="logoutBtn" class="winBtn danger">Salir</button></div>
     <div id="player"></div><div id="chaser"></div><div id="floor"></div>
-    <div id="touchControls"><div id="jumpBtn" class="touchBtn">⬆</div><div id="duckBtn" class="touchBtn">⬇</div></div>
-    <div id="controlsHint">⬆ Desliza arriba para saltar · ⬇ Abajo para agacharte</div>
-
-    <div id="authScreen" class="panel">
-      <h1>🏃 Heysen Escape</h1>
-      <p>Regístrate o inicia sesión para guardar tus puntos globalmente.</p>
-      <button id="showLogin">🔐 Iniciar sesión</button>
-      <button id="showRegister" class="secondary">📝 Registrarse</button>
-      <button id="localModeBtn" style="background:linear-gradient(135deg,#6a6a6a,#4a4a4a);color:white;margin-top:12px;">🎮 Modo Local</button>
-      <div class="instructions">Tus datos se guardan en Google Sheets.</div>
-    </div>
-
-    <div id="registerBox" class="panel">
-      <h1>📝 Registrarse</h1>
-      <input id="registerName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off">
-      <input id="registerPass" type="password" minlength="4" maxlength="32" placeholder="Contraseña (mínimo 4 caracteres)">
-      <p id="registerError" class="warning"></p>
-      <p id="registerLoading" class="loading"></p>
-      <button id="registerBtn">Crear cuenta</button><button class="secondary authBack">Volver</button>
-    </div>
-
-    <div id="loginBox" class="panel">
-      <h1>🔐 Iniciar sesión</h1>
-      <input id="loginName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off">
-      <input id="loginPass" type="password" maxlength="32" placeholder="Contraseña">
-      <p id="loginError" class="warning"></p>
-      <p id="loginLoading" class="loading"></p>
-      <button id="loginBtn">Entrar</button><button class="secondary authBack">Volver</button>
-    </div>
-
-    <div id="gameOver" class="panel">
-      <h1>💀 ¡Game Over!</h1>
-      <p>Puntaje: <span id="finalScore">0</span></p>
-      <p>Total: <span id="totalScore">0</span></p>
-      <button id="restartBtn">🔄 Jugar</button><button class="secondary openBoard">🏆 Tabla</button>
-    </div>
-
-    <div id="leaderboard" class="panel">
-      <h1>🏆 Clasificación</h1>
-      <ol id="leaderboardList"></ol>
-      <button id="closeBoard">Cerrar</button>
-    </div>
+    <div id="touchControls"><div id="jumpBtn" class="touchBtn">↑</div><div id="duckBtn" class="touchBtn">↓</div></div><div id="controlsHint">↑ Desliza arriba o salta · ↓ Abajo para agacharte</div>
+    <section id="authScreen" class="panel"><h1>🏃 Heysen Escape</h1><p>Una carrera con estilo Windows 7.</p><button id="showLogin" class="winBtn">🔐 Iniciar sesión</button><button id="showRegister" class="winBtn secondary">📝 Registrarse</button><br><button id="localModeBtn" class="winBtn">🎮 Modo local</button><p class="instructions">Tus datos se guardan en Google Sheets.</p></section>
+    <section id="registerBox" class="panel"><h1>📝 Crear cuenta</h1><input id="registerName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off"><input id="registerPass" type="password" minlength="4" maxlength="32" placeholder="Contraseña (mínimo 4 caracteres)"><p id="registerError" class="warning"></p><p id="registerLoading" class="loading"></p><button id="registerBtn" class="winBtn">Crear cuenta</button><button class="winBtn secondary authBack">Volver</button></section>
+    <section id="loginBox" class="panel"><h1>🔐 Iniciar sesión</h1><input id="loginName" maxlength="16" placeholder="Nombre de usuario" autocomplete="off"><input id="loginPass" type="password" maxlength="32" placeholder="Contraseña"><p id="loginError" class="warning"></p><p id="loginLoading" class="loading"></p><button id="loginBtn" class="winBtn">Entrar</button><button class="winBtn secondary authBack">Volver</button></section>
+    <section id="gameOver" class="panel"><h1>💀 ¡Game Over!</h1><p>Puntaje de esta partida: <b id="finalScore">0</b></p><p>Total acumulado: <b id="totalScore">0</b></p><button id="restartBtn" class="winBtn">🔄 Jugar otra vez</button><button class="winBtn secondary openBoard">🏆 Tabla</button></section>
+    <section id="leaderboard" class="panel"><h1>🏆 Clasificación</h1><ol id="leaderboardList"></ol><button id="closeBoard" class="winBtn">Cerrar</button></section>
+    <div id="taskbar"><button id="startOrb" aria-label="Inicio">Inicio</button><div class="taskTitle">🏃 Heysen Escape</div><button id="soundBtn" title="Activar o desactivar sonido" aria-label="Sonido">🔊</button></div>
   </div>
-
-  <audio id="death1" preload="none" src="https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3"></audio>
-  <audio id="death2" preload="none" src="https://www.myinstants.com/media/sounds/bone-crack.mp3"></audio>
-  <audio id="death3" preload="none" src="https://www.myinstants.com/media/sounds/spongebob-fail.mp3"></audio>
-  <audio id="death4" preload="none" src="https://www.myinstants.com/media/sounds/brain-fart.mp3"></audio>
-  <audio id="death5" preload="none" src="https://www.myinstants.com/media/sounds/fart-with-reverb.mp3"></audio>
-  <audio id="menuMusic" preload="none" loop src="https://www.myinstants.com/media/sounds/mii-channel-music.mp3"></audio>
-  <audio id="gameMusic" preload="none" loop src="https://www.myinstants.com/media/sounds/dreamrunning_trim-1.mp3"></audio>
-  <audio id="jobSound" preload="none" src="https://www.myinstants.com/media/sounds/steal-a-brainrot-job-job-sahur.mp3"></audio>
-  <audio id="jumpSound" preload="none" src="https://www.myinstants.com/media/sounds/cartoon-jump.mp3"></audio>
-
+  <audio id="death1" preload="none" src="https://www.myinstants.com/media/sounds/undertakers-bell_2UwFCIe.mp3"></audio><audio id="death2" preload="none" src="https://www.myinstants.com/media/sounds/bone-crack.mp3"></audio><audio id="death3" preload="none" src="https://www.myinstants.com/media/sounds/spongebob-fail.mp3"></audio><audio id="death4" preload="none" src="https://www.myinstants.com/media/sounds/brain-fart.mp3"></audio><audio id="death5" preload="none" src="https://www.myinstants.com/media/sounds/fart-with-reverb.mp3"></audio><audio id="menuMusic" preload="none" loop src="https://www.myinstants.com/media/sounds/mii-channel-music.mp3"></audio><audio id="gameMusic" preload="none" loop src="https://www.myinstants.com/media/sounds/dreamrunning_trim-1.mp3"></audio><audio id="jobSound" preload="none" src="https://www.myinstants.com/media/sounds/steal-a-brainrot-job-job-sahur.mp3"></audio><audio id="jumpSound" preload="none" src="https://www.myinstants.com/media/sounds/cartoon-jump.mp3"></audio>
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzD3AOdO-qxiM0IPDw9kp0xH1Xk43lgdrk4-rP-5jbH4t2GXlFiJkqUYeNyXpVp-1uL/exec';
-    const player = document.getElementById('player'), chaser = document.getElementById('chaser'), background = document.getElementById('background');
-    const scoreDisplay = document.getElementById('score'), userBar = document.getElementById('userBar'), currentUser = document.getElementById('currentUser');
-    const authScreen = document.getElementById('authScreen'), registerBox = document.getElementById('registerBox'), loginBox = document.getElementById('loginBox');
-    const gameOverScreen = document.getElementById('gameOver'), leaderboard = document.getElementById('leaderboard'), leaderboardList = document.getElementById('leaderboardList');
-    const menuMusic = document.getElementById('menuMusic'), gameMusic = document.getElementById('gameMusic'), jobSound = document.getElementById('jobSound'), jumpSound = document.getElementById('jumpSound');
-    const deathSounds = [document.getElementById('death1'),document.getElementById('death2'),document.getElementById('death3'),document.getElementById('death4'),document.getElementById('death5')];
-    let username = localStorage.getItem('heysenSession') || '', userData = null;
-    let isLocalMode = false;
-    let localBestScore = parseInt(localStorage.getItem('heysenLocalBest') || '0', 10);
-    let gameRunning = false, score = 0, gameSpeed = 6, bgX = 0, playerY = 0, velocityY = 0, jumping = false, ducking = false, chaserOffset = 250;
-    let obstacles = [], lastFrame = 0, scoreAccumulator = 0, jobAccumulator = 0, spawnAccumulator = 0, animationFrame = 0;
-    let obstacleTimer, gameTimer, scoreTimer, jobSoundTimer;
-    let viewportWidth = window.innerWidth;
-    const keys = { up:false, down:false };
-    const jumpBtn = document.getElementById('jumpBtn'), duckBtn = document.getElementById('duckBtn');
-    
-    let touchStartY = 0, touchStartX = 0, touchStartTime = 0;
-    const gameContainer = document.getElementById('gameContainer');
-    
-    function hidePanels() { [authScreen, registerBox, loginBox, gameOverScreen, leaderboard].forEach(x => x.style.display='none'); }
-    function play(audio, rate=1, volume=1) { audio.pause(); audio.currentTime = 0; audio.playbackRate = rate; audio.volume = volume; audio.play().catch(()=>{}); }
-    function stop(audio) { audio.pause(); audio.currentTime = 0; }
-    function playMenuMusic() { stop(gameMusic); menuMusic.volume=.35; menuMusic.play().catch(()=>{}); }
-    function playGameMusic() { stop(menuMusic); gameMusic.volume=.45; gameMusic.play().catch(()=>{}); }
-    async function callScript(action, params={}) {
-      const url = new URL(SCRIPT_URL); url.searchParams.set('action', action);
-      for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 8000);
-      try {
-        const response = await fetch(url.toString(), { method: 'GET', cache: 'no-store', signal: controller.signal });
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        const text = await response.text();
-        try { return JSON.parse(text); } catch { throw new Error('El servidor no devolvió JSON.'); }
-      } finally { clearTimeout(timeout); }
-    }
-    
-    document.addEventListener('keydown', e => {
-      if(['w','W','ArrowUp',' '].includes(e.key)) { keys.up=true; e.preventDefault(); }
-      if(['s','S','ArrowDown','z','x','k','l'].includes(e.key)) { keys.down=true; e.preventDefault(); }
-    });
-    document.addEventListener('keyup', e => {
-      if(['w','W','ArrowUp',' '].includes(e.key)) keys.up=false;
-      if(['s','S','ArrowDown','z','x','k','l'].includes(e.key)) keys.down=false;
-    });
-    
-    function startJump() { keys.up=true; jumpBtn.classList.add('active'); }
-    function stopJump() { keys.up=false; jumpBtn.classList.remove('active'); }
-    jumpBtn.addEventListener('touchstart', e => { e.preventDefault(); startJump(); }, { passive: false });
-    jumpBtn.addEventListener('touchend', e => { e.preventDefault(); stopJump(); }, { passive: false });
-    jumpBtn.addEventListener('touchcancel', e => { e.preventDefault(); stopJump(); }, { passive: false });
-    jumpBtn.addEventListener('mousedown', startJump);
-    jumpBtn.addEventListener('mouseup', stopJump);
-    jumpBtn.addEventListener('mouseleave', stopJump);
-    
-    function startDuck() { keys.down=true; duckBtn.classList.add('active'); }
-    function stopDuck() { keys.down=false; duckBtn.classList.remove('active'); }
-    duckBtn.addEventListener('touchstart', e => { e.preventDefault(); startDuck(); }, { passive: false });
-    duckBtn.addEventListener('touchend', e => { e.preventDefault(); stopDuck(); }, { passive: false });
-    duckBtn.addEventListener('touchcancel', e => { e.preventDefault(); stopDuck(); }, { passive: false });
-    duckBtn.addEventListener('mousedown', startDuck);
-    duckBtn.addEventListener('mouseup', stopDuck);
-    duckBtn.addEventListener('mouseleave', stopDuck);
-    
-    gameContainer.addEventListener('touchstart', e => {
-      if(e.target.closest('.panel') || e.target.closest('#touchControls')) return;
-      touchStartY = e.touches[0].clientY;
-      touchStartX = e.touches[0].clientX;
-      touchStartTime = Date.now();
-    }, { passive: true });
-    
-    gameContainer.addEventListener('touchend', e => {
-      if(e.target.closest('.panel') || e.target.closest('#touchControls')) return;
-      const touchEndY = e.changedTouches[0].clientY;
-      const touchEndX = e.changedTouches[0].clientX;
-      const deltaY = touchEndY - touchStartY;
-      const deltaX = touchEndX - touchStartX;
-      const deltaTime = Date.now() - touchStartTime;
-      if(deltaTime < 500 && Math.abs(deltaY) > 50 && Math.abs(deltaY) > Math.abs(deltaX)) {
-        if(deltaY < -50) { keys.up=true; setTimeout(()=>keys.up=false, 200); }
-        else if(deltaY > 50) { keys.down=true; setTimeout(()=>keys.down=false, 200); }
-      }
-    }, { passive: true });
-    
-    let gamepadIndex = null;
-    window.addEventListener('gamepadconnected', e => { gamepadIndex = e.gamepad.index; });
-    window.addEventListener('gamepaddisconnected', e => { if(e.gamepad.index === gamepadIndex) gamepadIndex = null; });
-    
-    function pollGamepad() {
-      if(gamepadIndex === null || !gameRunning) { requestAnimationFrame(pollGamepad); return; }
-      const gamepad = navigator.getGamepads()[gamepadIndex];
-      if(!gamepad) { requestAnimationFrame(pollGamepad); return; }
-      const jumpButtons = [0, 2, 5, 7, 11];
-      const duckButtons = [1, 3, 6, 12, 13];
-      jumpButtons.forEach(btn => { if(gamepad.buttons[btn] && gamepad.buttons[btn].pressed) keys.up=true; });
-      duckButtons.forEach(btn => { if(gamepad.buttons[btn] && gamepad.buttons[btn].pressed) keys.down=true; });
-      if(gamepad.axes[1] < -0.5) keys.up=true;
-      if(gamepad.axes[1] > 0.5) keys.down=true;
-      requestAnimationFrame(pollGamepad);
-    }
-    pollGamepad();
-    
-    document.getElementById('showLogin').onclick = () => { authScreen.style.display='none'; loginBox.style.display='block'; };
-    document.getElementById('showRegister').onclick = () => { authScreen.style.display='none'; registerBox.style.display='block'; };
-    document.querySelectorAll('.authBack').forEach(b => b.onclick = () => { hidePanels(); authScreen.style.display='block'; });
-    document.getElementById('registerBtn').onclick = async () => {
-      const name = document.getElementById('registerName').value.trim().replace(/[<>]/g,''), pass = document.getElementById('registerPass').value;
-      const error = document.getElementById('registerError'), loading = document.getElementById('registerLoading');
-      if(name.length<3) return error.textContent='Mínimo 3 caracteres.'; if(pass.length<4) return error.textContent='Mínimo 4 caracteres.';
-      loading.textContent = '⏳...';
-      try { const res = await callScript('register',{username:name,password:pass}); loading.textContent=''; if(res.success) login(name,{total:0,best:0,games:0}); else error.textContent=res.error; }
-      catch(e) { loading.textContent=''; error.textContent=e.message; }
-    };
-    document.getElementById('loginBtn').onclick = async () => {
-      const name = document.getElementById('loginName').value.trim(), pass = document.getElementById('loginPass').value;
-      const error = document.getElementById('loginError'), loading = document.getElementById('loginLoading');
-      loading.textContent = '⏳...';
-      try { const res = await callScript('login',{username:name,password:pass}); loading.textContent=''; if(res.success){username=name;userData={total:res.total,best:res.best,games:res.games};localStorage.setItem('heysenSession',username);localStorage.setItem('heysenSessionData',JSON.stringify(userData));currentUser.textContent='👤 '+username+' · '+userData.total;userBar.style.display='block';hidePanels();startGame();} else error.textContent=res.error; }
-      catch(e) { loading.textContent=''; error.textContent=e.message; }
-    };
-    document.getElementById('localModeBtn').onclick = () => {
-      isLocalMode = true; username = 'Local'; userData = { total: localBestScore, best: localBestScore, games: 0 };
-      currentUser.textContent = '🎮 Local · Mejor: ' + localBestScore; userBar.style.display = 'block'; hidePanels(); startGame();
-    };
-    function login(n,d){username=n;userData=d;localStorage.setItem('heysenSession',n);localStorage.setItem('heysenSessionData',JSON.stringify(d));currentUser.textContent='👤 '+n+' · '+d.total;userBar.style.display='block';hidePanels();startGame();}
-    function startGame(){obstacles.forEach(o=>{clearInterval(o.timer);o.el.remove();});obstacles=[];gameRunning=true;score=0;gameSpeed=6;bgX=0;playerY=0;velocityY=0;jumping=false;ducking=false;chaserOffset=250;player.classList.remove('crouching');player.style.height='100px';player.style.bottom='120px';background.style.left='0px';updateChaser();playGameMusic();clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacleTimer=setInterval(createObstacle,1450);gameTimer=setInterval(updateGame,20);scoreTimer=setInterval(()=>{score++;scoreDisplay.textContent='Puntos: '+score;if(score%50===0)gameSpeed+=.3;},100);jobSoundTimer=setInterval(()=>{if(gameRunning&&Math.random()<.32)play(jobSound,.55+Math.random()*.2,.65);},3800);}
-    function updateGame(){if(!gameRunning)return;const sp=ducking?gameSpeed*.45:gameSpeed;bgX-=sp;if(bgX<=-innerWidth)bgX=0;background.style.left=bgX+'px';if(keys.up&&!jumping){jumping=true;velocityY=15;play(jumpSound,.88+Math.random()*.25,.8);}if(keys.down&&!jumping){ducking=true;player.classList.add('crouching');player.style.height='60px';chaserOffset=Math.max(135,chaserOffset-1.5);}else{ducking=false;player.classList.remove('crouching');player.style.height='100px';chaserOffset=Math.min(250,chaserOffset+.35);}if(jumping){playerY+=velocityY;velocityY-=.8;if(playerY<=0){playerY=0;velocityY=0;jumping=false;}}player.style.bottom=(120+playerY)+'px';updateChaser();if(chaserOffset<=135)endGame(true);}
-    function updateChaser(){chaser.style.marginLeft='-'+chaserOffset+'px';}
-    function createObstacle(){if(!gameRunning)return;const el=document.createElement('div');el.className='obstacle';el.style.left=innerWidth+'px';const r=Math.random();let b=false;if(r<.30){el.style.width='120px';el.style.height='70px';}else if(r<.55){el.style.width='140px';el.style.height='90px';}else if(r<.78){b=true;el.classList.add('blue');el.style.width='115px';el.style.height='155px';}else{el.style.width='90px';el.style.height='120px';}el.style.bottom='120px';document.getElementById('gameContainer').appendChild(el);const o={el,isBlue:b,timer:null};obstacles.push(o);o.timer=setInterval(()=>{if(!gameRunning)return clearInterval(o.timer);const x=parseFloat(el.style.left)-gameSpeed;el.style.left=x+'px';if(!(b&&ducking)&&collidesThin(player,el))endGame(true);if(x<-180){clearInterval(o.timer);el.remove();obstacles=obstacles.filter(i=>i!==o);}},20);}
-    function collidesThin(a,b){const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect(),inset=br.width*.32;return!(ar.right-10<br.left+inset||ar.left+10>br.right-inset||ar.bottom-8<br.top+10||ar.top+8>br.bottom-10);}
-    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacles.forEach(o=>clearInterval(o.timer));stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username:username,score:score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData));}catch(e){}}else{if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore.toString());userData.best=localBestScore;userData.total=localBestScore;}}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;finalScore.textContent=score;document.getElementById('totalScore').textContent=userData.total;const d=deathSounds[Math.floor(Math.random()*deathSounds.length)];d.playbackRate=.65+Math.random()*1;d.volume=.9;d.play().catch(()=>{});gameOverScreen.style.display='block';playMenuMusic();}}
-    async function openBoard(){leaderboardList.innerHTML='<li>Cargando...</li>';leaderboard.style.display='block';try{const res=await callScript('leaderboard');leaderboardList.innerHTML='';if(!res.users||!res.users.length){const li=document.createElement('li');li.className='empty';li.textContent='Sin jugadores.';leaderboardList.appendChild(li);}else{res.users.slice(0,20).forEach(u=>{const li=document.createElement('li');li.textContent=u.username+' — '+u.total+' pts';leaderboardList.appendChild(li);});}}catch(e){leaderboardList.innerHTML='<li>Error: '+e.message+'</li>';}}
-    document.getElementById('logoutBtn').onclick=()=>{endGame(false);username='';userData=null;isLocalMode=false;localStorage.removeItem('heysenSession');userBar.style.display='none';hidePanels();authScreen.style.display='block';playMenuMusic();};
-    document.getElementById('restartBtn').onclick=()=>{gameOverScreen.style.display='none';startGame();};
-    document.getElementById('leaderboardBtn').onclick=openBoard;
-    document.querySelector('.openBoard').onclick=openBoard;
-    document.getElementById('closeBoard').onclick=()=>leaderboard.style.display='none';
-    if(username){const sd=localStorage.getItem('heysenSessionData');if(sd)userData=JSON.parse(sd);currentUser.textContent='👤 '+username+' · '+(userData?userData.total:0);userBar.style.display='block';}playMenuMusic();
+    const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzD3AOdO-qxiM0IPDw9kp0xH1Xk43lgdrk4-rP-5jbH4t2GXlFiJkqUYeNyXpVp-1uL/exec';
+    const $=id=>document.getElementById(id), player=$('player'),chaser=$('chaser'),background=$('background'),scoreDisplay=$('score'),userBar=$('userBar'),currentUser=$('currentUser'),authScreen=$('authScreen'),registerBox=$('registerBox'),loginBox=$('loginBox'),gameOverScreen=$('gameOver'),leaderboard=$('leaderboard'),leaderboardList=$('leaderboardList'),menuMusic=$('menuMusic'),gameMusic=$('gameMusic'),jobSound=$('jobSound'),jumpSound=$('jumpSound'),deathSounds=[$('death1'),$('death2'),$('death3'),$('death4'),$('death5')],jumpBtn=$('jumpBtn'),duckBtn=$('duckBtn'),gameContainer=$('gameContainer');
+    let username=localStorage.getItem('heysenSession')||'',userData=null,isLocalMode=false,localBestScore=+localStorage.getItem('heysenLocalBest')||0,gameRunning=false,score=0,gameSpeed=6,bgX=0,playerY=0,velocityY=0,jumping=false,ducking=false,chaserOffset=250,obstacles=[],obstacleTimer,gameTimer,scoreTimer,jobSoundTimer,gamepadIndex=null;
+    const keys={up:false,down:false}; let soundOn=localStorage.getItem('heysenSound')!=='off',audioCtx;
+    function beep(freq=650,duration=.06,type='sine',volume=.035){if(!soundOn)return;try{audioCtx??=new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(volume,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g).connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration)}catch{}}
+    function hidePanels(){[authScreen,registerBox,loginBox,gameOverScreen,leaderboard].forEach(x=>x.style.display='none')}; function play(audio,rate=1,volume=1){if(!soundOn)return;audio.pause();audio.currentTime=0;audio.playbackRate=rate;audio.volume=volume;audio.play().catch(()=>{})}; function stop(audio){audio.pause();audio.currentTime=0}; function playMenuMusic(){stop(gameMusic);if(soundOn){menuMusic.volume=.27;menuMusic.play().catch(()=>{})}};function playGameMusic(){stop(menuMusic);if(soundOn){gameMusic.volume=.38;gameMusic.play().catch(()=>{})}};
+    function updateSound(){ $('soundBtn').textContent=soundOn?'🔊':'🔇';$('soundBtn').title=soundOn?'Desactivar sonido':'Activar sonido'; if(!soundOn){stop(menuMusic);stop(gameMusic)} else if(gameRunning)playGameMusic();else playMenuMusic()}; $('soundBtn').onclick=()=>{soundOn=!soundOn;localStorage.setItem('heysenSound',soundOn?'on':'off');beep(soundOn?880:220,.09);updateSound()}; document.querySelectorAll('button').forEach(b=>b.addEventListener('mouseenter',()=>beep(520,.025,'sine',.012)));document.addEventListener('click',e=>{if(e.target.closest('button'))beep(760,.045,'square',.02)});
+    async function callScript(action,params={}){const url=new URL(SCRIPT_URL);url.searchParams.set('action',action);Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),8000);try{const r=await fetch(url,{cache:'no-store',signal:controller.signal});if(!r.ok)throw Error('HTTP '+r.status);try{return JSON.parse(await r.text())}catch{throw Error('El servidor no devolvió JSON.')}}finally{clearTimeout(timeout)}}
+    document.addEventListener('keydown',e=>{if(['w','W','ArrowUp',' '].includes(e.key)){keys.up=true;e.preventDefault()}if(['s','S','ArrowDown','z','x','k','l'].includes(e.key)){keys.down=true;e.preventDefault()}});document.addEventListener('keyup',e=>{if(['w','W','ArrowUp',' '].includes(e.key))keys.up=false;if(['s','S','ArrowDown','z','x','k','l'].includes(e.key))keys.down=false});
+    function bindControl(el,key){const on=e=>{e?.preventDefault();keys[key]=true;el.classList.add('active')},off=e=>{e?.preventDefault();keys[key]=false;el.classList.remove('active')};['touchstart','mousedown'].forEach(t=>el.addEventListener(t,on,{passive:false}));['touchend','touchcancel','mouseup','mouseleave'].forEach(t=>el.addEventListener(t,off,{passive:false}))}bindControl(jumpBtn,'up');bindControl(duckBtn,'down');
+    let sy=0,sx=0,st=0;gameContainer.addEventListener('touchstart',e=>{if(e.target.closest('.panel,#touchControls,#taskbar'))return;sy=e.touches[0].clientY;sx=e.touches[0].clientX;st=Date.now()},{passive:true});gameContainer.addEventListener('touchend',e=>{if(e.target.closest('.panel,#touchControls,#taskbar'))return;const dy=e.changedTouches[0].clientY-sy,dx=e.changedTouches[0].clientX-sx;if(Date.now()-st<500&&Math.abs(dy)>50&&Math.abs(dy)>Math.abs(dx)){const k=dy<0?'up':'down';keys[k]=true;setTimeout(()=>keys[k]=false,200)}},{passive:true});
+    window.addEventListener('gamepadconnected',e=>gamepadIndex=e.gamepad.index);window.addEventListener('gamepaddisconnected',e=>{if(e.gamepad.index===gamepadIndex)gamepadIndex=null});(function poll(){const g=gamepadIndex!==null&&navigator.getGamepads()[gamepadIndex];if(g&&gameRunning){keys.up||=([0,2,5,7,11].some(i=>g.buttons[i]?.pressed)||g.axes[1]<-.5);keys.down||=([1,3,6,12,13].some(i=>g.buttons[i]?.pressed)||g.axes[1]>.5)}requestAnimationFrame(poll)})();
+    $('showLogin').onclick=()=>{authScreen.style.display='none';loginBox.style.display='block'};$('showRegister').onclick=()=>{authScreen.style.display='none';registerBox.style.display='block'};document.querySelectorAll('.authBack').forEach(b=>b.onclick=()=>{hidePanels();authScreen.style.display='block'});
+    $('registerBtn').onclick=async()=>{const name=$('registerName').value.trim().replace(/[<>]/g,''),pass=$('registerPass').value,error=$('registerError'),loading=$('registerLoading');if(name.length<3)return error.textContent='Mínimo 3 caracteres.';if(pass.length<4)return error.textContent='Mínimo 4 caracteres.';loading.textContent='Conectando…';try{const r=await callScript('register',{username:name,password:pass});loading.textContent='';r.success?login(name,{total:0,best:0,games:0}):error.textContent=r.error}catch(e){loading.textContent='';error.textContent=e.message}};
+    $('loginBtn').onclick=async()=>{const name=$('loginName').value.trim(),pass=$('loginPass').value,error=$('loginError'),loading=$('loginLoading');loading.textContent='Conectando…';try{const r=await callScript('login',{username:name,password:pass});loading.textContent='';if(r.success){username=name;userData={total:r.total,best:r.best,games:r.games};localStorage.setItem('heysenSession',username);localStorage.setItem('heysenSessionData',JSON.stringify(userData));currentUser.textContent='👤 '+username+' · '+userData.total;userBar.style.display='flex';hidePanels();startGame()}else error.textContent=r.error}catch(e){loading.textContent='';error.textContent=e.message}};
+    $('localModeBtn').onclick=()=>{isLocalMode=true;username='Local';userData={total:localBestScore,best:localBestScore,games:0};currentUser.textContent='🎮 Local · Mejor: '+localBestScore;userBar.style.display='flex';hidePanels();startGame()};function login(n,d){username=n;userData=d;localStorage.setItem('heysenSession',n);localStorage.setItem('heysenSessionData',JSON.stringify(d));currentUser.textContent='👤 '+n+' · '+d.total;userBar.style.display='flex';hidePanels();startGame()}
+    function startGame(){obstacles.forEach(o=>{clearInterval(o.timer);o.el.remove()});obstacles=[];gameRunning=true;score=0;gameSpeed=6;bgX=0;playerY=velocityY=0;jumping=ducking=false;chaserOffset=250;player.classList.remove('crouching');player.style.cssText='height:100px;bottom:120px';background.style.left='0px';updateChaser();playGameMusic();clearInterval(obstacleTimer);clearInterval(gameTimer);clearInterval(scoreTimer);clearInterval(jobSoundTimer);obstacleTimer=setInterval(createObstacle,1450);gameTimer=setInterval(updateGame,20);scoreTimer=setInterval(()=>{score++;scoreDisplay.innerHTML='Puntos: '+score;if(score%50===0)gameSpeed+=.3},100);jobSoundTimer=setInterval(()=>{if(gameRunning&&Math.random()<.32)play(jobSound,.55+Math.random()*.2,.65)},3800)}
+    function updateGame(){if(!gameRunning)return;const sp=ducking?gameSpeed*.45:gameSpeed;bgX-=sp;if(bgX<=-innerWidth)bgX=0;background.style.left=bgX+'px';if(keys.up&&!jumping){jumping=true;velocityY=15;play(jumpSound,.88+Math.random()*.25,.8)}if(keys.down&&!jumping){ducking=true;player.classList.add('crouching');player.style.height='60px';chaserOffset=Math.max(135,chaserOffset-1.5)}else{ducking=false;player.classList.remove('crouching');player.style.height='100px';chaserOffset=Math.min(250,chaserOffset+.35)}if(jumping){playerY+=velocityY;velocityY-=.8;if(playerY<=0){playerY=velocityY=0;jumping=false}}player.style.bottom=120+playerY+'px';updateChaser();if(chaserOffset<=135)endGame(true)}function updateChaser(){chaser.style.marginLeft='-'+chaserOffset+'px'}
+    function createObstacle(){if(!gameRunning)return;const el=document.createElement('div'),r=Math.random();let b=false;el.className='obstacle';el.style.left=innerWidth+'px';if(r<.3){el.style.cssText+='width:120px;height:70px'}else if(r<.55){el.style.cssText+='width:140px;height:90px'}else if(r<.78){b=true;el.classList.add('blue');el.style.cssText+='width:115px;height:155px'}else el.style.cssText+='width:90px;height:120px';el.style.bottom='120px';gameContainer.appendChild(el);const o={el,timer:null};obstacles.push(o);o.timer=setInterval(()=>{if(!gameRunning)return clearInterval(o.timer);const x=parseFloat(el.style.left)-gameSpeed;el.style.left=x+'px';if(!(b&&ducking)&&collidesThin(player,el))endGame(true);if(x<-180){clearInterval(o.timer);el.remove();obstacles=obstacles.filter(i=>i!==o)}},20)}function collidesThin(a,b){const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect(),i=br.width*.32;return!(ar.right-10<br.left+i||ar.left+10>br.right-i||ar.bottom-8<br.top+10||ar.top+8>br.bottom-10)}
+    async function endGame(save=true){if(!gameRunning)return;gameRunning=false;[obstacleTimer,gameTimer,scoreTimer,jobSoundTimer].forEach(clearInterval);obstacles.forEach(o=>clearInterval(o.timer));stop(gameMusic);if(save&&username&&userData){if(!isLocalMode){try{await callScript('updateScore',{username,score});userData.total+=score;userData.best=Math.max(userData.best,score);userData.games++;localStorage.setItem('heysenSessionData',JSON.stringify(userData))}catch{}}else if(score>localBestScore){localBestScore=score;localStorage.setItem('heysenLocalBest',localBestScore);userData.best=userData.total=localBestScore}currentUser.textContent=isLocalMode?'🎮 Local · Mejor: '+userData.total:'👤 '+username+' · '+userData.total;$('finalScore').textContent=score;$('totalScore').textContent=userData.total;play(deathSounds[Math.floor(Math.random()*deathSounds.length)],.65+Math.random(),.9);gameOverScreen.style.display='block';playMenuMusic()}}
+    async function openBoard(){leaderboardList.innerHTML='<li>Cargando…</li>';leaderboard.style.display='block';try{const r=await callScript('leaderboard');leaderboardList.innerHTML='';if(!r.users?.length)leaderboardList.innerHTML='<li class="empty">Sin jugadores.</li>';else r.users.slice(0,20).forEach(u=>{const li=document.createElement('li');li.textContent=u.username+' — '+u.total+' pts';leaderboardList.appendChild(li)})}catch(e){leaderboardList.textContent='Error: '+e.message}}
+    $('logoutBtn').onclick=()=>{endGame(false);username='';userData=null;isLocalMode=false;localStorage.removeItem('heysenSession');userBar.style.display='none';hidePanels();authScreen.style.display='block';playMenuMusic()};$('restartBtn').onclick=()=>{gameOverScreen.style.display='none';startGame()};$('leaderboardBtn').onclick=openBoard;document.querySelector('.openBoard').onclick=openBoard;$('closeBoard').onclick=()=>leaderboard.style.display='none';$('startOrb').onclick=()=>{hidePanels();authScreen.style.display='block';beep(660,.12,'triangle',.04)};
+    if(username){try{userData=JSON.parse(localStorage.getItem('heysenSessionData'))}catch{}currentUser.textContent='👤 '+username+' · '+(userData?.total||0);userBar.style.display='flex'}updateSound();
   </script>
 </body>
 </html>
